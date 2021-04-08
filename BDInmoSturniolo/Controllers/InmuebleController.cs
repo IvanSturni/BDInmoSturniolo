@@ -4,58 +4,52 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BDInmoSturniolo.Controllers
 {
-    public class InquilinoController : Controller
+    public class InmuebleController : Controller
     {
-        private readonly RepositorioInquilino repositorio;
+        private readonly RepositorioInmueble repositorio;
+        private readonly RepositorioPropietario repositorioPropietario;
 
-        public InquilinoController(IConfiguration configuration)
+        public InmuebleController(IConfiguration configuration)
         {
-            this.repositorio = new RepositorioInquilino(configuration);
+            this.repositorio = new RepositorioInmueble(configuration);
+            this.repositorioPropietario = new RepositorioPropietario(configuration);
         }
 
-        // GET: InquilinoController
+        // GET: InmuebleController
         public ActionResult Index()
         {
-            try
-            {
-                IList<Inquilino> lista = repositorio.ObtenerTodos();
-                return View(lista);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
+            IList<Inmueble> lista = repositorio.ObtenerTodos();
+            return View(lista);
         }
 
-        // GET: InquilinoController/Details/5
+        // GET: InmuebleController/Details/5
         public ActionResult Details(int id)
         {
             var p = repositorio.Obtener(id);
             return View(p);
         }
 
-        // GET: InquilinoController/Create
+        // GET: InmuebleController/Create
         public ActionResult Create()
         {
+            ViewBag.Propietarios = repositorioPropietario.ObtenerTodos();
             return View();
         }
 
-        // POST: InquilinoController/Create
+        // POST: InmuebleController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Inquilino i)
+        public ActionResult Create(Inmueble i)
         {
             try
             {
                 int res = repositorio.Alta(i);
-                TempData["Mensaje"] = $"Inquilino creado con éxito! Id: {res}";
+                TempData["Mensaje"] = $"Inmueble creado con éxito! Id: {res}";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception e)
@@ -65,22 +59,23 @@ namespace BDInmoSturniolo.Controllers
             }
         }
 
-        // GET: InquilinoController/Edit/5
+        // GET: InmuebleController/Edit/5
         public ActionResult Edit(int id)
         {
             var i = repositorio.Obtener(id);
+            ViewBag.Propietarios = repositorioPropietario.ObtenerTodos();
             return View(i);
         }
 
-        // POST: InquilinoController/Edit/5
+        // POST: InmuebleController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Inquilino i)
+        public ActionResult Edit(int id, Inmueble i)
         {
             try
             {
                 repositorio.Modificacion(i);
-                TempData["Mensaje"] = "Inquilino modificado con éxito!";
+                TempData["Mensaje"] = "Inmueble modificado con éxito!";
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -89,22 +84,22 @@ namespace BDInmoSturniolo.Controllers
             }
         }
 
-        // GET: InquilinoController/Delete/5
+        // GET: InmuebleController/Delete/5
         public ActionResult Delete(int id)
         {
             var i = repositorio.Obtener(id);
             return View(i);
         }
 
-        // POST: InquilinoController/Delete/5
+        // POST: InmuebleController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Inquilino i)
+        public ActionResult Delete(int id, Inmueble i)
         {
             try
             {
                 repositorio.Baja(id);
-                TempData["Mensaje"] = "Inquilino eliminado con éxito!";
+                TempData["Mensaje"] = "Inmueble eliminado con éxito!";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception e)

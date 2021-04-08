@@ -13,12 +13,10 @@ namespace BDInmoSturniolo.Controllers
     public class PropietarioController : Controller
     {
         private readonly RepositorioPropietario repositorio;
-        private readonly IConfiguration configuration;
 
         public PropietarioController(IConfiguration configuration)
         {
             this.repositorio = new RepositorioPropietario(configuration);
-            this.configuration = configuration;
         }
 
         // GET: PropietarioController
@@ -109,9 +107,10 @@ namespace BDInmoSturniolo.Controllers
                 TempData["Mensaje"] = "Propietario eliminado con éxito!";
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception e)
             {
-                return View(p);
+                TempData["Error"] = e.;
+                return RedirectToAction(nameof(Index));
             }
         }
     }

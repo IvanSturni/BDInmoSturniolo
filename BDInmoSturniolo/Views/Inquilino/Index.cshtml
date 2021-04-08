@@ -1,24 +1,32 @@
 ﻿@model IEnumerable<BDInmoSturniolo.Models.Inquilino>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Índice";
     string mensaje = TempData["Mensaje"] + "";
     string error = TempData["Error"] + "";
 }
 
-<h1>Index</h1>
+<h1>Índice</h1>
 
 @if (mensaje.Length != 0)
 {
-    <div class="alert alert-dismissible alert-success">@mensaje</div>
+    <div class="alert alert-dismissible alert-success">@mensaje
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 }
 @if (error.Length != 0)
 {
-    <div class="alert alert-dismissible alert-warning">@mensaje</div>
+    <div class="alert alert-dismissible alert-warning">@error
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 }
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Crear Nuevo</a>
 </p>
 
 <table class="table">
@@ -74,9 +82,9 @@
                     @Html.DisplayFor(modelItem => item.Clave)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.Id })
                 </td>
             </tr>
         }
