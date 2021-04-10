@@ -1,0 +1,81 @@
+﻿@model BDInmoSturniolo.Models.Contrato
+
+@{
+    ViewData["Title"] = "Crear nuevo";
+    List<Inquilino> inquilinos = ViewBag.Inquilinos;
+    List<Inmueble> inmuebles = ViewBag.Inmuebles;
+
+    string mensaje = TempData["Mensaje"] + "";
+    string error = TempData["Error"] + "";
+}
+
+<h1>Crear Nuevo</h1>
+
+<h4>@Model.GetType().Name</h4>
+
+@if (mensaje.Length != 0)
+{
+    <div class="alert alert-dismissible alert-success">@mensaje
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+@if (error.Length != 0)
+{
+    <div class="alert alert-dismissible alert-warning">@error
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FechaInicio" class="control-label"></label>
+                <input asp-for="FechaInicio" class="form-control" type="date"/>
+                <span asp-validation-for="FechaInicio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaFinal" class="control-label"></label>
+                <input asp-for="FechaFinal" class="form-control" type="date"/>
+                <span asp-validation-for="FechaFinal" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InquilinoId" class="control-label"></label>  <i class="bi bi-file-person"></i>
+                <select class="form-control" name="InquilinoId">
+                    @foreach (Inquilino inq in inquilinos)
+                    {
+                        <option value="@inq.Id">@inq.Nombre @inq.Apellido</option>
+                    }
+                </select>
+                <span asp-validation-for="InquilinoId" class="text-danger"></span>  <i class="bi bi-house-fill"></i>
+            </div>
+            <div class="form-group">
+                <label asp-for="InmuebleId" class="control-label"></label>
+                <select class="form-control" name="InmuebleId">
+                    @foreach (Inmueble inm in inmuebles)
+                    {
+                        <option value="@inm.Id">@(inm.Direccion + ", Id " + inm.Id)</option>
+                    }
+                </select>
+                <span asp-validation-for="InmuebleId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Volver a la lista</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

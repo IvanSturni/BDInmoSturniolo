@@ -1,13 +1,12 @@
 ﻿@model IEnumerable<BDInmoSturniolo.Models.Propietario>
 
 @{
-    ViewData["Title"] = "Índice";
+    ViewData["Title"] = "Propietarios";
     string mensaje = TempData["Mensaje"] + "";
     string error = TempData["Error"] + "";
-    // y el modelo está bien así?
 }
 
-<h1>Índice</h1>
+<h1><i class="bi bi-file-person-fill">   </i>Propietarios</h1>
 
 @if (mensaje.Length != 0)
 {
@@ -27,13 +26,13 @@
 }
 
 <p>
-    <a asp-action="Create">Crear Nuevo</a>
+    <a asp-action="Create"><i class="bi bi-plus-circle"></i>   Crear Nuevo</a>
 </p>
 
 <table class="table">
     <thead>
         <tr>
-            <th>
+            <th width="60px">
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
@@ -83,9 +82,9 @@
                     @Html.DisplayFor(modelItem => item.Clave)
                 </td>
                 <td>
-                    @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Eliminar", "Delete", new { id = item.Id })
+                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-fill"></i></a> |
+                    <a asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-file-earmark-text-fill text-info"></i></a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash-fill text-danger"></i></a>
                 </td>
             </tr>
         }

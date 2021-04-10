@@ -109,7 +109,7 @@ namespace BDInmoSturniolo.Controllers
             }
             catch (Exception e)
             {
-                TempData["Error"] = e.;
+                TempData["Error"] = e.Message;
                 return RedirectToAction(nameof(Index));
             }
         }

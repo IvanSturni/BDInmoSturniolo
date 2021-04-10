@@ -2,11 +2,32 @@
 
 @{
     ViewData["Title"] = "Crear nuevo";
+
+    string mensaje = TempData["Mensaje"] + "";
+    string error = TempData["Error"] + "";
 }
 
 <h1>Crear nuevo</h1>
 
-<h4>Inquilino</h4>
+<h4>@Model.GetType().Name</h4>
+
+@if (mensaje.Length != 0)
+{
+    <div class="alert alert-dismissible alert-success">@mensaje
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+@if (error.Length != 0)
+{
+    <div class="alert alert-dismissible alert-warning">@error
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -50,7 +71,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Volver al Índice</a>
+    <a asp-action="Index">Volver a la lista</a>
 </div>
 
 @section Scripts {
