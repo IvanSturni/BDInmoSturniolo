@@ -2,4 +2,4 @@
 Trabajo de la materia de .NET
 
 
-![imagen](diaw_03-30-2021_16-25-21.png)
+![imagen](diaw_04-13-2021_15-09-00.png)
