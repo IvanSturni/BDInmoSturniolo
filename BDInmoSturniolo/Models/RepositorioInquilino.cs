@@ -23,8 +23,8 @@ namespace BDInmoSturniolo.Models
                 string sql = "INSERT INTO Inquilinos " +
                     $"({nameof(Inquilino.Nombre)}, {nameof(Inquilino.Apellido)}, " +
                     $"{nameof(Inquilino.Dni)}, {nameof(Inquilino.Telefono)}, " +
-                    $"{nameof(Inquilino.Email)}, {nameof(Inquilino.Clave)}) " +
-                    $"VALUES (@nombre, @apellido, @dni, @telefono, @email, @clave);" +
+                    $"{nameof(Inquilino.Email)}) " +
+                    $"VALUES (@nombre, @apellido, @dni, @telefono, @email);" +
                     "SELECT SCOPE_IDENTITY();";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
@@ -33,7 +33,6 @@ namespace BDInmoSturniolo.Models
                     command.Parameters.AddWithValue("@dni", i.Dni);
                     command.Parameters.AddWithValue("@telefono", i.Telefono);
                     command.Parameters.AddWithValue("@email", i.Email);
-                    command.Parameters.AddWithValue("@clave", i.Clave);
                     connection.Open();
                     res = Convert.ToInt32(command.ExecuteScalar());
                     i.Id = res;
@@ -74,8 +73,7 @@ namespace BDInmoSturniolo.Models
                     $"{nameof(Inquilino.Apellido)}=@apellido, " +
                     $"{nameof(Inquilino.Dni)}=@dni, " +
                     $"{nameof(Inquilino.Telefono)}=@telefono, " +
-                    $"{nameof(Inquilino.Email)}=@email, " +
-                    $"{nameof(Inquilino.Clave)}=@clave " +
+                    $"{nameof(Inquilino.Email)}=@email " +
                     $"WHERE {nameof(Inquilino.Id)}=@id;";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
@@ -84,7 +82,6 @@ namespace BDInmoSturniolo.Models
                     command.Parameters.AddWithValue("@dni", i.Dni);
                     command.Parameters.AddWithValue("@telefono", i.Telefono);
                     command.Parameters.AddWithValue("@email", i.Email);
-                    command.Parameters.AddWithValue("@clave", i.Clave);
                     command.Parameters.AddWithValue("@id", i.Id);
                     connection.Open();
                     res = command.ExecuteNonQuery();
@@ -101,8 +98,7 @@ namespace BDInmoSturniolo.Models
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 string sql = $"SELECT {nameof(Inquilino.Id)}, {nameof(Inquilino.Nombre)}, {nameof(Inquilino.Apellido)}, " +
-                    $"{nameof(Inquilino.Dni)}, {nameof(Inquilino.Telefono)}, " +
-                    $"{nameof(Inquilino.Email)}, {nameof(Inquilino.Clave)} " +
+                    $"{nameof(Inquilino.Dni)}, {nameof(Inquilino.Telefono)}, {nameof(Inquilino.Email)} " +
                     $"FROM Inquilinos WHERE {nameof(Inquilino.Id)}=@id;";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
@@ -118,8 +114,7 @@ namespace BDInmoSturniolo.Models
                             Apellido = reader.GetString(2),
                             Dni = reader.GetString(3),
                             Telefono = reader.GetString(4),
-                            Email = reader.GetString(5),
-                            Clave = reader.GetString(6)
+                            Email = reader.GetString(5)
                         };
                     }
                     connection.Close();
@@ -136,8 +131,7 @@ namespace BDInmoSturniolo.Models
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 string sql = $"SELECT {nameof(Inquilino.Id)}, {nameof(Inquilino.Nombre)}, {nameof(Inquilino.Apellido)}, " +
-                    $"{nameof(Inquilino.Dni)}, {nameof(Inquilino.Telefono)}, " +
-                    $"{nameof(Inquilino.Email)}, {nameof(Inquilino.Clave)} " +
+                    $"{nameof(Inquilino.Dni)}, {nameof(Inquilino.Telefono)}, {nameof(Inquilino.Email)} " +
                     $"FROM Inquilinos;";
                 using (SqlCommand command = new SqlCommand(sql,connection))
                 {
@@ -153,7 +147,6 @@ namespace BDInmoSturniolo.Models
                             Dni = reader.GetString(3),
                             Telefono = reader.GetString(4),
                             Email = reader.GetString(5),
-                            Clave = reader.GetString(6)
                         });
                     }
                 }
