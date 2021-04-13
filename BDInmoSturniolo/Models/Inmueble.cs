@@ -14,6 +14,7 @@ namespace BDInmoSturniolo.Models
         public int Id { get; set; }
 
         public string Descripcion { get; set; }
+        // TODO: agregar uso
         [Required]
         public string Tipo { get; set; }
         [Required]
