@@ -1,0 +1,44 @@
+﻿@model BDInmoSturniolo.Models.Pago
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Detalles</h1>
+
+<div>
+    <h4>Pago</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Fecha)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Fecha)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Importe)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Importe)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ContratoId)  <i class="bi bi-calendar4-range"></i>
+        </dt>
+        <dd class="col-sm-10">
+            Id: @Html.DisplayFor(model => model.ContratoId), @Html.DisplayFor(model => model.Contrato.Inquilino.Apellido)
+             @Html.DisplayFor(model => model.Contrato.Inquilino.Nombre)
+             en @Html.DisplayFor(model => model.Contrato.Inmueble.Direccion)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" title="Editar" asp-route-id="@Model.Id"><i class="bi bi-pencil-fill"></i> Editar</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

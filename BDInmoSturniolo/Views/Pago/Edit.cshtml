@@ -1,7 +1,8 @@
-﻿@model BDInmoSturniolo.Models.Inquilino
+﻿@model BDInmoSturniolo.Models.Pago
 
 @{
-    ViewData["Title"] = "Editar";
+    ViewData["Title"] = "Edit";
+    List<Contrato> contratos = ViewBag.Contratos;
 
     string mensaje = TempData["Mensaje"] + "";
     string error = TempData["Error"] + "";
@@ -13,7 +14,8 @@
 
 @if (mensaje.Length != 0)
 {
-    <div class="alert alert-dismissible alert-success">@mensaje
+    <div class="alert alert-dismissible alert-success">
+        @mensaje
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -21,7 +23,8 @@
 }
 @if (error.Length != 0)
 {
-    <div class="alert alert-dismissible alert-warning">@error
+    <div class="alert alert-dismissible alert-warning">
+        @error
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -39,29 +42,24 @@
                 <span asp-validation-for="Id" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" maxlength="30" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
+                <label asp-for="Fecha" class="control-label"></label>
+                <input asp-for="Fecha" class="form-control" />
+                <span asp-validation-for="Fecha" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Apellido" class="control-label"></label>
-                <input asp-for="Apellido" class="form-control" maxlength="30" />
-                <span asp-validation-for="Apellido" class="text-danger"></span>
+                <label asp-for="Importe" class="control-label"></label>
+                <input asp-for="Importe" class="form-control" />
+                <span asp-validation-for="Importe" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Dni" class="control-label"></label>
-                <input asp-for="Dni" class="form-control" maxlength="9" />
-                <span asp-validation-for="Dni" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Telefono" class="control-label"></label>
-                <input asp-for="Telefono" class="form-control" maxlength="16" />
-                <span asp-validation-for="Telefono" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" maxlength="50" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                <label asp-for="ContratoId" class="control-label"></label>  <i class="bi bi-calendar4-range"></i>
+                <select class="form-control" name="ContratoId">
+                    @foreach (Contrato c in contratos)
+                    {
+                        @:<option @(Model.ContratoId == c.Id ? "selected" : "") value="@c.Id">@c.Inquilino.Apellido @c.Inquilino.Nombre en @c.Inmueble.Direccion</option>
+                    }
+                </select>
+                <span asp-validation-for="ContratoId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Guardar" class="btn btn-primary" />

@@ -1,28 +1,30 @@
-﻿@model IEnumerable<BDInmoSturniolo.Models.Propietario>
+﻿@model IEnumerable<BDInmoSturniolo.Models.Pago>
 
 @{
-    ViewData["Title"] = "Propietarios";
+    ViewData["Title"] = "Pagos";
     string mensaje = TempData["Mensaje"] + "";
     string error = TempData["Error"] + "";
 }
 
-<h1><i class="bi bi-file-person-fill">   </i>Propietarios</h1>
+<h1><i class="bi bi-credit-card-fill">   </i>Pagos</h1>
 
 @if (mensaje.Length != 0)
 {
-    <div class="alert alert-dismissible alert-success">@mensaje
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
+    <div class="alert alert-dismissible alert-success">
+        @mensaje
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
 }
 @if (error.Length != 0)
 {
-    <div class="alert alert-dismissible alert-warning">@error
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
+    <div class="alert alert-dismissible alert-warning">
+        @error
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
 }
 
 <p>
@@ -36,16 +38,13 @@
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
-                Nombre Completo
+                @Html.DisplayNameFor(model => model.Fecha)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Telefono)
+                @Html.DisplayNameFor(model => model.Importe)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                Inmuebles
+                @Html.DisplayNameFor(model => model.ContratoId)  <i class="bi bi-calendar4-range"></i>
             </th>
             <th width="100px"></th>
         </tr>
@@ -58,16 +57,14 @@
                     @Html.DisplayFor(modelItem => item.Id)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Apellido) @Html.DisplayFor(modelItem => item.Nombre)
+                    @Html.DisplayFor(modelItem => item.Fecha)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Telefono)
+                    @Html.DisplayFor(modelItem => item.Importe)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    <a asp-controller="Inmueble" asp-action="PorPropietario" asp-route-id="@item.Id">Ver Inmuebles <i class="bi bi-house-fill"></i></a>
+                    @Html.DisplayFor(modelItem => item.Contrato.Inquilino.Apellido) @Html.DisplayFor(modelItem => item.Contrato.Inquilino.Nombre)
+                     en @Html.DisplayFor(modelItem => item.Contrato.Inmueble.Direccion)
                 </td>
                 <td>
                     <a asp-action="Edit" title="Editar" asp-route-id="@item.Id"><i class="bi bi-pencil-fill"></i></a> |

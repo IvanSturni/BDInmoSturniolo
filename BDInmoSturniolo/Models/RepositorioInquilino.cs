@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BDInmoSturniolo.Models
 {
-    public class RepositorioInquilino : RepositorioBase
+    public class RepositorioInquilino : RepositorioBase, IRepositorio<Inquilino>
     {
         public RepositorioInquilino(IConfiguration configuration) : base(configuration)
         {
@@ -38,7 +38,7 @@ namespace BDInmoSturniolo.Models
                     i.Id = res;
                     connection.Close();
                 }
-                
+
             }
             return i.Id;
         }
@@ -133,7 +133,7 @@ namespace BDInmoSturniolo.Models
                 string sql = $"SELECT {nameof(Inquilino.Id)}, {nameof(Inquilino.Nombre)}, {nameof(Inquilino.Apellido)}, " +
                     $"{nameof(Inquilino.Dni)}, {nameof(Inquilino.Telefono)}, {nameof(Inquilino.Email)} " +
                     $"FROM Inquilinos;";
-                using (SqlCommand command = new SqlCommand(sql,connection))
+                using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     connection.Open();
                     SqlDataReader reader = command.ExecuteReader();

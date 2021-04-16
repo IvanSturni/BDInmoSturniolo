@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BDInmoSturniolo.Models
 {
-    public class RepositorioContrato : RepositorioBase
+    public class RepositorioContrato : RepositorioBase, IRepositorio<Contrato>
     {
         public RepositorioContrato(IConfiguration configuration) : base(configuration)
         {

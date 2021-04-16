@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,26 +13,18 @@ namespace BDInmoSturniolo.Controllers
 {
     public class InquilinoController : Controller
     {
-        private readonly RepositorioInquilino repositorio;
+        private readonly IRepositorio<Inquilino> repositorio;
 
-        public InquilinoController(IConfiguration configuration)
+        public InquilinoController(IRepositorio<Inquilino> repositorio)
         {
-            this.repositorio = new RepositorioInquilino(configuration);
+            this.repositorio = repositorio;
         }
 
         // GET: InquilinoController
         public ActionResult Index()
         {
-            try
-            {
-                IList<Inquilino> lista = repositorio.ObtenerTodos();
-                return View(lista);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
+            IList<Inquilino> lista = repositorio.ObtenerTodos();
+            return View(lista);
         }
 
         // GET: InquilinoController/Details/5
@@ -58,9 +51,14 @@ namespace BDInmoSturniolo.Controllers
                 TempData["Mensaje"] = $"Inquilino creado con éxito! Id: {res}";
                 return RedirectToAction(nameof(Index));
             }
+            catch (SqlException e)
+            {
+                TempData["Error"] = e.Number + " " + e.Message;
+                return View();
+            }
             catch (Exception e)
             {
-                TempData["Mensaje"] = e.StackTrace;
+                TempData["Error"] = "Ocurrió un error inesperado.";
                 return View();
             }
         }
@@ -83,9 +81,15 @@ namespace BDInmoSturniolo.Controllers
                 TempData["Mensaje"] = "Inquilino modificado con éxito!";
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (SqlException e)
             {
-                return View();
+                TempData["Error"] = e.Number + " " + e.Message;
+                return View(i);
+            }
+            catch (Exception e)
+            {
+                TempData["Error"] = "Ocurrió un error inesperado.";
+                return View(i);
             }
         }
 
@@ -107,10 +111,18 @@ namespace BDInmoSturniolo.Controllers
                 TempData["Mensaje"] = "Inquilino eliminado con éxito!";
                 return RedirectToAction(nameof(Index));
             }
+            catch (SqlException e)
+            {
+                if (e.Number == 547)
+                {
+                    TempData["Error"] = "No se pudo eliminar, está en uso.";
+                }
+                return RedirectToAction(nameof(Index)); ;
+            }
             catch (Exception e)
             {
-                TempData["Error"] = e.Message;
-                return RedirectToAction(nameof(Index));
+                TempData["Error"] = "Ocurrió un error inesperado.";
+                return RedirectToAction(nameof(Index)); ;
             }
         }
     }

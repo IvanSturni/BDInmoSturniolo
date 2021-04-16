@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,15 +12,15 @@ namespace BDInmoSturniolo.Controllers
 {
     public class ContratoController : Controller
     {
-        private readonly RepositorioContrato repositorio;
-        private readonly RepositorioInquilino repositorioInquilino;
-        private readonly RepositorioInmueble repositorioInmueble;
+        private readonly IRepositorio<Contrato> repositorio;
+        private readonly IRepositorio<Inquilino> repositorioInquilino;
+        private readonly IRepositorioInmueble repositorioInmueble;
 
-        public ContratoController(IConfiguration configuration)
+        public ContratoController(IRepositorio<Contrato> repositorio, IRepositorioInmueble repositorioInmueble, IRepositorio<Inquilino> repositorioInquilino)
         {
-            this.repositorio = new RepositorioContrato(configuration);
-            this.repositorioInquilino = new RepositorioInquilino(configuration);
-            this.repositorioInmueble = new RepositorioInmueble(configuration);
+            this.repositorio = repositorio;
+            this.repositorioInquilino = repositorioInquilino;
+            this.repositorioInmueble = repositorioInmueble;
         }
 
         // GET: ContratoController
@@ -55,9 +56,16 @@ namespace BDInmoSturniolo.Controllers
                 TempData["Mensaje"] = $"Contrato creado con éxito! Id: {res}";
                 return RedirectToAction(nameof(Index));
             }
+            catch (SqlException e)
+            {
+                TempData["Error"] = e.Number + " " + e.Message;
+                ViewBag.Inquilinos = repositorioInquilino.ObtenerTodos();
+                ViewBag.Inmuebles = repositorioInmueble.ObtenerTodos();
+                return View();
+            }
             catch (Exception e)
             {
-                TempData["Error"] = e.Message;
+                TempData["Error"] = "Ocurrió un error inesperado.";
                 ViewBag.Inquilinos = repositorioInquilino.ObtenerTodos();
                 ViewBag.Inmuebles = repositorioInmueble.ObtenerTodos();
                 return View();
@@ -84,9 +92,16 @@ namespace BDInmoSturniolo.Controllers
                 TempData["Mensaje"] = "Contrato modificado con éxito!";
                 return RedirectToAction(nameof(Index));
             }
+            catch (SqlException e)
+            {
+                TempData["Error"] = e.Number + " " + e.Message;
+                ViewBag.Inquilinos = repositorioInquilino.ObtenerTodos();
+                ViewBag.Inmuebles = repositorioInmueble.ObtenerTodos();
+                return View(c);
+            }
             catch (Exception e)
             {
-                TempData["Error"] = e.Message;
+                TempData["Error"] = "Ocurrió un error inesperado.";
                 ViewBag.Inquilinos = repositorioInquilino.ObtenerTodos();
                 ViewBag.Inmuebles = repositorioInmueble.ObtenerTodos();
                 return View(c);
@@ -111,10 +126,18 @@ namespace BDInmoSturniolo.Controllers
                 TempData["Mensaje"] = "Contrato eliminado con éxito!";
                 return RedirectToAction(nameof(Index));
             }
+            catch (SqlException e)
+            {
+                if (e.Number == 547)
+                {
+                    TempData["Error"] = "No se pudo eliminar, está en uso.";
+                }
+                return RedirectToAction(nameof(Index)); ;
+            }
             catch (Exception e)
             {
-                TempData["Error"] = e.Message;
-                return RedirectToAction(nameof(Index));
+                TempData["Error"] = "Ocurrió un error inesperado.";
+                return RedirectToAction(nameof(Index)); ;
             }
         }
     }

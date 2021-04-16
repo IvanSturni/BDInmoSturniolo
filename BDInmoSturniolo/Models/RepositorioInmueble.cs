@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BDInmoSturniolo.Models
 {
-    public class RepositorioInmueble : RepositorioBase
+    public class RepositorioInmueble : RepositorioBase, IRepositorioInmueble
     {
         public RepositorioInmueble(IConfiguration configuration) : base(configuration)
         {
@@ -41,7 +41,7 @@ namespace BDInmoSturniolo.Models
                     i.Id = res;
                     connection.Close();
                 }
-                
+
             }
             return i.Id;
         }
@@ -125,7 +125,7 @@ namespace BDInmoSturniolo.Models
                             Ambientes = reader.GetInt32(3),
                             Superficie = reader.GetInt32(4),
                             Direccion = reader.GetString(5),
-                            Precio = reader.GetInt32(6),
+                            Precio = reader.GetDecimal(6),
                             PropietarioId = reader.GetInt32(7),
                             Duenio = new Propietario
                             {
@@ -143,6 +143,50 @@ namespace BDInmoSturniolo.Models
             return res;
         }
 
+        public IList<Inmueble> ObtenerPorPropietario(int id)
+        {
+            IList<Inmueble> lista = new List<Inmueble>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string sql = $"SELECT i.{nameof(Inmueble.Id)}, {nameof(Inmueble.Descripcion)}, {nameof(Inmueble.Tipo)}, " +
+                    $"{nameof(Inmueble.Ambientes)}, {nameof(Inmueble.Superficie)}, " +
+                    $"{nameof(Inmueble.Direccion)}, {nameof(Inmueble.Precio)}, {nameof(Inmueble.PropietarioId)}, " +
+                    $"{nameof(Inmueble.Duenio.Nombre)}, {nameof(Inmueble.Duenio.Apellido)}, {nameof(Inmueble.Duenio.Dni)} " +
+                    $"FROM Inmuebles i INNER JOIN Propietarios p ON i.PropietarioId = p.Id " +
+                    $"WHERE i.PropietarioId = @id;";
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@id", id);
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        lista.Add(new Inmueble
+                        {
+                            Id = reader.GetInt32(0),
+                            Descripcion = reader.GetString(1),
+                            Tipo = reader.GetString(2),
+                            Ambientes = reader.GetInt32(3),
+                            Superficie = reader.GetInt32(4),
+                            Direccion = reader.GetString(5),
+                            Precio = reader.GetDecimal(6),
+                            PropietarioId = reader.GetInt32(7),
+                            Duenio = new Propietario
+                            {
+                                Id = reader.GetInt32(7),
+                                Nombre = reader.GetString(8),
+                                Apellido = reader.GetString(9),
+                                Dni = reader.GetString(10)
+                            }
+                        });
+                    }
+                }
+            }
+
+            return lista;
+        }
+
         public IList<Inmueble> ObtenerTodos()
         {
             IList<Inmueble> lista = new List<Inmueble>();
@@ -154,7 +198,7 @@ namespace BDInmoSturniolo.Models
                     $"{nameof(Inmueble.Direccion)}, {nameof(Inmueble.Precio)}, {nameof(Inmueble.PropietarioId)}, " +
                     $"{nameof(Inmueble.Duenio.Nombre)}, {nameof(Inmueble.Duenio.Apellido)}, {nameof(Inmueble.Duenio.Dni)} " +
                     $"FROM Inmuebles i INNER JOIN Propietarios p ON i.PropietarioId = p.Id;";
-                using (SqlCommand command = new SqlCommand(sql,connection))
+                using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     connection.Open();
                     SqlDataReader reader = command.ExecuteReader();
@@ -168,7 +212,7 @@ namespace BDInmoSturniolo.Models
                             Ambientes = reader.GetInt32(3),
                             Superficie = reader.GetInt32(4),
                             Direccion = reader.GetString(5),
-                            Precio = reader.GetInt32(6),
+                            Precio = reader.GetDecimal(6),
                             PropietarioId = reader.GetInt32(7),
                             Duenio = new Propietario
                             {

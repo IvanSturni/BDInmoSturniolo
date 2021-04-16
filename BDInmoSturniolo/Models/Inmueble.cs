@@ -23,7 +23,7 @@ namespace BDInmoSturniolo.Models
         [Required]
         public string Direccion { get; set; }
         [Required]
-        public int Precio { get; set; }
+        public decimal Precio { get; set; }
         [DisplayName("Dueño")]
         public int PropietarioId { get; set; }
         [ForeignKey(nameof(PropietarioId))]
