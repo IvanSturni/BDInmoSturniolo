@@ -21,15 +21,16 @@ namespace BDInmoSturniolo.Models
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 string sql = "INSERT INTO Inmuebles " +
-                    $"({nameof(Inmueble.Descripcion)}, {nameof(Inmueble.Tipo)}, " +
+                    $"({nameof(Inmueble.Descripcion)}, {nameof(Inmueble.Uso)}, {nameof(Inmueble.Tipo)}, " +
                     $"{nameof(Inmueble.Ambientes)}, {nameof(Inmueble.Superficie)}, " +
                     $"{nameof(Inmueble.Direccion)}, {nameof(Inmueble.Precio)}, " +
                     $"{nameof(Inmueble.PropietarioId)}) " +
-                    $"VALUES (@descripcion, @tipo, @dni, @superficie, @direccion, @precio, @propietarioId);" +
+                    $"VALUES (@descripcion, @uso, @tipo, @dni, @superficie, @direccion, @precio, @propietarioId);" +
                     "SELECT SCOPE_IDENTITY();";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     command.Parameters.AddWithValue("@descripcion", i.Descripcion);
+                    command.Parameters.AddWithValue("@uso", i.Uso);
                     command.Parameters.AddWithValue("@tipo", i.Tipo);
                     command.Parameters.AddWithValue("@dni", i.Ambientes);
                     command.Parameters.AddWithValue("@superficie", i.Superficie);
@@ -73,6 +74,7 @@ namespace BDInmoSturniolo.Models
             {
                 string sql = "UPDATE Inmuebles SET " +
                     $"{nameof(Inmueble.Descripcion)}=@descripcion, " +
+                    $"{nameof(Inmueble.Uso)}=@uso, " +
                     $"{nameof(Inmueble.Tipo)}=@tipo, " +
                     $"{nameof(Inmueble.Ambientes)}=@dni, " +
                     $"{nameof(Inmueble.Superficie)}=@superficie, " +
@@ -84,6 +86,7 @@ namespace BDInmoSturniolo.Models
                 {
                     command.Parameters.AddWithValue("@id", i.Id);
                     command.Parameters.AddWithValue("@descripcion", i.Descripcion);
+                    command.Parameters.AddWithValue("@uso", i.Uso);
                     command.Parameters.AddWithValue("@tipo", i.Tipo);
                     command.Parameters.AddWithValue("@dni", i.Ambientes);
                     command.Parameters.AddWithValue("@superficie", i.Superficie);
@@ -104,7 +107,7 @@ namespace BDInmoSturniolo.Models
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = $"SELECT i.{nameof(Inmueble.Id)}, {nameof(Inmueble.Descripcion)}, {nameof(Inmueble.Tipo)}, " +
+                string sql = $"SELECT i.{nameof(Inmueble.Id)}, {nameof(Inmueble.Descripcion)}, {nameof(Inmueble.Uso)}, {nameof(Inmueble.Tipo)}, " +
                     $"{nameof(Inmueble.Ambientes)}, {nameof(Inmueble.Superficie)}, " +
                     $"{nameof(Inmueble.Direccion)}, {nameof(Inmueble.Precio)}, {nameof(Inmueble.PropietarioId)}, " +
                     $"{nameof(Inmueble.Duenio.Nombre)}, {nameof(Inmueble.Duenio.Apellido)}, {nameof(Inmueble.Duenio.Dni)} " +
@@ -121,18 +124,19 @@ namespace BDInmoSturniolo.Models
                         {
                             Id = reader.GetInt32(0),
                             Descripcion = reader.GetString(1),
-                            Tipo = reader.GetString(2),
-                            Ambientes = reader.GetInt32(3),
-                            Superficie = reader.GetInt32(4),
-                            Direccion = reader.GetString(5),
-                            Precio = reader.GetDecimal(6),
-                            PropietarioId = reader.GetInt32(7),
+                            Uso = reader.GetInt32(2),
+                            Tipo = reader.GetString(3),
+                            Ambientes = reader.GetInt32(4),
+                            Superficie = reader.GetInt32(5),
+                            Direccion = reader.GetString(6),
+                            Precio = reader.GetDecimal(7),
+                            PropietarioId = reader.GetInt32(8),
                             Duenio = new Propietario
                             {
-                                Id = reader.GetInt32(7),
-                                Nombre = reader.GetString(8),
-                                Apellido = reader.GetString(9),
-                                Dni = reader.GetString(10)
+                                Id = reader.GetInt32(8),
+                                Nombre = reader.GetString(9),
+                                Apellido = reader.GetString(10),
+                                Dni = reader.GetString(11)
                             }
                         };
                     }
@@ -149,7 +153,7 @@ namespace BDInmoSturniolo.Models
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = $"SELECT i.{nameof(Inmueble.Id)}, {nameof(Inmueble.Descripcion)}, {nameof(Inmueble.Tipo)}, " +
+                string sql = $"SELECT i.{nameof(Inmueble.Id)}, {nameof(Inmueble.Descripcion)}, {nameof(Inmueble.Uso)}, {nameof(Inmueble.Tipo)}, " +
                     $"{nameof(Inmueble.Ambientes)}, {nameof(Inmueble.Superficie)}, " +
                     $"{nameof(Inmueble.Direccion)}, {nameof(Inmueble.Precio)}, {nameof(Inmueble.PropietarioId)}, " +
                     $"{nameof(Inmueble.Duenio.Nombre)}, {nameof(Inmueble.Duenio.Apellido)}, {nameof(Inmueble.Duenio.Dni)} " +
@@ -166,18 +170,19 @@ namespace BDInmoSturniolo.Models
                         {
                             Id = reader.GetInt32(0),
                             Descripcion = reader.GetString(1),
-                            Tipo = reader.GetString(2),
-                            Ambientes = reader.GetInt32(3),
-                            Superficie = reader.GetInt32(4),
-                            Direccion = reader.GetString(5),
-                            Precio = reader.GetDecimal(6),
-                            PropietarioId = reader.GetInt32(7),
+                            Uso = reader.GetInt32(2),
+                            Tipo = reader.GetString(3),
+                            Ambientes = reader.GetInt32(4),
+                            Superficie = reader.GetInt32(5),
+                            Direccion = reader.GetString(6),
+                            Precio = reader.GetDecimal(7),
+                            PropietarioId = reader.GetInt32(8),
                             Duenio = new Propietario
                             {
-                                Id = reader.GetInt32(7),
-                                Nombre = reader.GetString(8),
-                                Apellido = reader.GetString(9),
-                                Dni = reader.GetString(10)
+                                Id = reader.GetInt32(8),
+                                Nombre = reader.GetString(9),
+                                Apellido = reader.GetString(10),
+                                Dni = reader.GetString(11)
                             }
                         });
                     }
@@ -193,7 +198,7 @@ namespace BDInmoSturniolo.Models
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = $"SELECT i.{nameof(Inmueble.Id)}, {nameof(Inmueble.Descripcion)}, {nameof(Inmueble.Tipo)}, " +
+                string sql = $"SELECT i.{nameof(Inmueble.Id)}, {nameof(Inmueble.Descripcion)}, {nameof(Inmueble.Uso)}, {nameof(Inmueble.Tipo)}, " +
                     $"{nameof(Inmueble.Ambientes)}, {nameof(Inmueble.Superficie)}, " +
                     $"{nameof(Inmueble.Direccion)}, {nameof(Inmueble.Precio)}, {nameof(Inmueble.PropietarioId)}, " +
                     $"{nameof(Inmueble.Duenio.Nombre)}, {nameof(Inmueble.Duenio.Apellido)}, {nameof(Inmueble.Duenio.Dni)} " +
@@ -208,18 +213,19 @@ namespace BDInmoSturniolo.Models
                         {
                             Id = reader.GetInt32(0),
                             Descripcion = reader.GetString(1),
-                            Tipo = reader.GetString(2),
-                            Ambientes = reader.GetInt32(3),
-                            Superficie = reader.GetInt32(4),
-                            Direccion = reader.GetString(5),
-                            Precio = reader.GetDecimal(6),
-                            PropietarioId = reader.GetInt32(7),
+                            Uso = reader.GetInt32(2),
+                            Tipo = reader.GetString(3),
+                            Ambientes = reader.GetInt32(4),
+                            Superficie = reader.GetInt32(5),
+                            Direccion = reader.GetString(6),
+                            Precio = reader.GetDecimal(7),
+                            PropietarioId = reader.GetInt32(8),
                             Duenio = new Propietario
                             {
-                                Id = reader.GetInt32(7),
-                                Nombre = reader.GetString(8),
-                                Apellido = reader.GetString(9),
-                                Dni = reader.GetString(10)
+                                Id = reader.GetInt32(8),
+                                Nombre = reader.GetString(9),
+                                Apellido = reader.GetString(10),
+                                Dni = reader.GetString(11)
                             }
                         });
                     }

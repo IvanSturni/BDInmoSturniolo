@@ -59,7 +59,7 @@ namespace BDInmoSturniolo.Controllers
                 ViewBag.Contratos = repositorioContrato.ObtenerTodos();
                 return View();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 TempData["Error"] = "Ocurrió un error inesperado.";
                 ViewBag.Contratos = repositorioContrato.ObtenerTodos();
@@ -92,7 +92,7 @@ namespace BDInmoSturniolo.Controllers
                 ViewBag.Contratos = repositorioContrato.ObtenerTodos();
                 return View(ent);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 TempData["Error"] = "Ocurrió un error inesperado.";
                 ViewBag.Contratos = repositorioContrato.ObtenerTodos();
@@ -126,7 +126,7 @@ namespace BDInmoSturniolo.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 TempData["Error"] = "Ocurrió un error inesperado.";
                 return RedirectToAction(nameof(Index));

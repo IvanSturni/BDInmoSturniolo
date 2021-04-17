@@ -53,6 +53,7 @@ namespace BDInmoSturniolo.Controllers
         // GET: InmuebleController/Create
         public ActionResult Create()
         {
+            ViewBag.Usos = Inmueble.ObtenerUsos();
             ViewBag.Propietarios = repositorioPropietario.ObtenerTodos();
             return View();
         }
@@ -71,12 +72,14 @@ namespace BDInmoSturniolo.Controllers
             catch (SqlException e)
             {
                 TempData["Error"] = e.Number + " " + e.Message;
+                ViewBag.Usos = Inmueble.ObtenerUsos();
                 ViewBag.Propietarios = repositorioPropietario.ObtenerTodos();
                 return View();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 TempData["Error"] = "Ocurrió un error inesperado.";
+                ViewBag.Usos = Inmueble.ObtenerUsos();
                 ViewBag.Propietarios = repositorioPropietario.ObtenerTodos();
                 return View();
             }
@@ -86,6 +89,7 @@ namespace BDInmoSturniolo.Controllers
         public ActionResult Edit(int id)
         {
             var ent = repositorio.Obtener(id);
+            ViewBag.Usos = Inmueble.ObtenerUsos();
             ViewBag.Propietarios = repositorioPropietario.ObtenerTodos();
             return View(ent);
         }
@@ -104,12 +108,14 @@ namespace BDInmoSturniolo.Controllers
             catch (SqlException e)
             {
                 TempData["Error"] = e.Number + " " + e.Message;
+                ViewBag.Usos = Inmueble.ObtenerUsos();
                 ViewBag.Propietarios = repositorioPropietario.ObtenerTodos();
                 return View(ent);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 TempData["Error"] = "Ocurrió un error inesperado.";
+                ViewBag.Usos = Inmueble.ObtenerUsos();
                 ViewBag.Propietarios = repositorioPropietario.ObtenerTodos();
                 return View(ent);
             }
@@ -141,7 +147,7 @@ namespace BDInmoSturniolo.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 TempData["Error"] = "Ocurrió un error inesperado.";
                 return RedirectToAction(nameof(Index));

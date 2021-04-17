@@ -8,13 +8,21 @@ using System.Threading.Tasks;
 
 namespace BDInmoSturniolo.Models
 {
+    public enum usoInmueble
+    {
+        Comercial = 1,
+        Residencial = 2
+    }
+
     public class Inmueble
     {
         [Key]
         public int Id { get; set; }
 
         public string Descripcion { get; set; }
-        // TODO: agregar uso
+        [Required]
+        public int Uso { get; set; }
+        public string UsoNombre => ((usoInmueble)Uso).ToString();
         [Required]
         public string Tipo { get; set; }
         [Required]
@@ -28,5 +36,16 @@ namespace BDInmoSturniolo.Models
         public int PropietarioId { get; set; }
         [ForeignKey(nameof(PropietarioId))]
         public Propietario Duenio { get; set; }
+
+        public static IDictionary<int, string> ObtenerUsos()
+        {
+            SortedDictionary<int, string> usos = new SortedDictionary<int, string>();
+            Type tipoEnumUso = typeof(usoInmueble);
+            foreach (var valor in Enum.GetValues(tipoEnumUso))
+            {
+                usos.Add((int)valor, Enum.GetName(tipoEnumUso, valor));
+            }
+            return usos;
+        }
     }
 }

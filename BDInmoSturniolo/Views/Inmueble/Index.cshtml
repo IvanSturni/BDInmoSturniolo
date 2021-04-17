@@ -39,6 +39,9 @@
                 @Html.DisplayNameFor(model => model.Descripcion)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Uso)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Tipo)
             </th>
             <th>
@@ -62,37 +65,40 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Descripcion)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Tipo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Ambientes)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Superficie)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Direccion)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Precio)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Duenio.Nombre) @Html.DisplayFor(modelItem => item.Duenio.Apellido)
-                </td>
-                <td>
-                    <a asp-action="Edit" title="Editar" asp-route-id="@item.Id"><i class="bi bi-pencil-fill"></i></a> |
-                    <a asp-action="Details" title="Detalles" asp-route-id="@item.Id"><i class="bi bi-file-earmark-text-fill text-info"></i></a> |
-                    <a asp-action="Delete" title="Eliminar" asp-route-id="@item.Id"><i class="bi bi-trash-fill text-danger"></i></a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UsoNombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tipo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ambientes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Superficie)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Direccion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Precio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Duenio.Nombre) @Html.DisplayFor(modelItem => item.Duenio.Apellido)
+            </td>
+            <td>
+                <a asp-action="Edit" title="Editar" asp-route-id="@item.Id"><i class="bi bi-pencil-fill"></i></a> |
+                <a asp-action="Details" title="Detalles" asp-route-id="@item.Id"><i class="bi bi-file-earmark-text-fill text-info"></i></a> |
+                <a asp-action="Delete" title="Eliminar" asp-route-id="@item.Id"><i class="bi bi-trash-fill text-danger"></i></a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>
