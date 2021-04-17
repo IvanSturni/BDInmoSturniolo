@@ -31,8 +31,8 @@ namespace BDInmoSturniolo.Controllers
         // GET: PagoController/Details/5
         public ActionResult Details(int id)
         {
-            var p = repositorio.Obtener(id);
-            return View(p);
+            var ent = repositorio.Obtener(id);
+            return View(ent);
         }
 
         // GET: PagoController/Create
@@ -45,11 +45,11 @@ namespace BDInmoSturniolo.Controllers
         // POST: PagoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Pago p)
+        public ActionResult Create(Pago ent)
         {
             try
             {
-                int res = repositorio.Alta(p);
+                int res = repositorio.Alta(ent);
                 TempData["Mensaje"] = $"Pago creado con éxito! Id: {res}";
                 return RedirectToAction(nameof(Index));
             }
@@ -70,19 +70,19 @@ namespace BDInmoSturniolo.Controllers
         // GET: PagoController/Edit/5
         public ActionResult Edit(int id)
         {
-            var p = repositorio.Obtener(id);
+            var ent = repositorio.Obtener(id);
             ViewBag.Contratos = repositorioContrato.ObtenerTodos();
-            return View(p);
+            return View(ent);
         }
 
         // POST: PagoController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Pago p)
+        public ActionResult Edit(int id, Pago ent)
         {
             try
             {
-                repositorio.Modificacion(p);
+                repositorio.Modificacion(ent);
                 TempData["Mensaje"] = "Pago modificado con éxito!";
                 return RedirectToAction(nameof(Index));
             }
@@ -90,27 +90,27 @@ namespace BDInmoSturniolo.Controllers
             {
                 TempData["Error"] = e.Number + " " + e.Message;
                 ViewBag.Contratos = repositorioContrato.ObtenerTodos();
-                return View(p);
+                return View(ent);
             }
             catch (Exception e)
             {
                 TempData["Error"] = "Ocurrió un error inesperado.";
                 ViewBag.Contratos = repositorioContrato.ObtenerTodos();
-                return View(p);
+                return View(ent);
             }
         }
 
         // GET: PagoController/Delete/5
         public ActionResult Delete(int id)
         {
-            var p = repositorio.Obtener(id);
-            return View(p);
+            var ent = repositorio.Obtener(id);
+            return View(ent);
         }
 
         // POST: PagoController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Pago i)
+        public ActionResult Delete(int id, Pago ent)
         {
             try
             {

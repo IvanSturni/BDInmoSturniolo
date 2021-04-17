@@ -46,8 +46,8 @@ namespace BDInmoSturniolo.Controllers
         // GET: InmuebleController/Details/5
         public ActionResult Details(int id)
         {
-            var p = repositorio.Obtener(id);
-            return View(p);
+            var ent = repositorio.Obtener(id);
+            return View(ent);
         }
 
         // GET: InmuebleController/Create
@@ -60,11 +60,11 @@ namespace BDInmoSturniolo.Controllers
         // POST: InmuebleController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Inmueble i)
+        public ActionResult Create(Inmueble ent)
         {
             try
             {
-                int res = repositorio.Alta(i);
+                int res = repositorio.Alta(ent);
                 TempData["Mensaje"] = $"Inmueble creado con éxito! Id: {res}";
                 return RedirectToAction(nameof(Index));
             }
@@ -85,19 +85,19 @@ namespace BDInmoSturniolo.Controllers
         // GET: InmuebleController/Edit/5
         public ActionResult Edit(int id)
         {
-            var i = repositorio.Obtener(id);
+            var ent = repositorio.Obtener(id);
             ViewBag.Propietarios = repositorioPropietario.ObtenerTodos();
-            return View(i);
+            return View(ent);
         }
 
         // POST: InmuebleController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Inmueble i)
+        public ActionResult Edit(int id, Inmueble ent)
         {
             try
             {
-                repositorio.Modificacion(i);
+                repositorio.Modificacion(ent);
                 TempData["Mensaje"] = "Inmueble modificado con éxito!";
                 return RedirectToAction(nameof(Index));
             }
@@ -105,27 +105,27 @@ namespace BDInmoSturniolo.Controllers
             {
                 TempData["Error"] = e.Number + " " + e.Message;
                 ViewBag.Propietarios = repositorioPropietario.ObtenerTodos();
-                return View(i);
+                return View(ent);
             }
             catch (Exception e)
             {
                 TempData["Error"] = "Ocurrió un error inesperado.";
                 ViewBag.Propietarios = repositorioPropietario.ObtenerTodos();
-                return View(i);
+                return View(ent);
             }
         }
 
         // GET: InmuebleController/Delete/5
         public ActionResult Delete(int id)
         {
-            var i = repositorio.Obtener(id);
-            return View(i);
+            var ent = repositorio.Obtener(id);
+            return View(ent);
         }
 
         // POST: InmuebleController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Inmueble i)
+        public ActionResult Delete(int id, Inmueble ent)
         {
             try
             {

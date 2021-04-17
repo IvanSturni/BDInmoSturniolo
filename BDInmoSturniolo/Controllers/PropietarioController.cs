@@ -30,8 +30,8 @@ namespace BDInmoSturniolo.Controllers
         // GET: PropietarioController/Details/5
         public ActionResult Details(int id)
         {
-            var p = repositorio.Obtener(id);
-            return View(p);
+            var ent = repositorio.Obtener(id);
+            return View(ent);
         }
 
         // GET: PropietarioController/Create
@@ -43,11 +43,11 @@ namespace BDInmoSturniolo.Controllers
         // POST: PropietarioController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Propietario p)
+        public ActionResult Create(Propietario ent)
         {
             try
             {
-                int res = repositorio.Alta(p);
+                int res = repositorio.Alta(ent);
                 TempData["Mensaje"] = $"Propietario creado con éxito! Id: {res}";
                 return RedirectToAction(nameof(Index));
             }
@@ -66,44 +66,44 @@ namespace BDInmoSturniolo.Controllers
         // GET: PropietarioController/Edit/5
         public ActionResult Edit(int id)
         {
-            var p = repositorio.Obtener(id);
-            return View(p);
+            var ent = repositorio.Obtener(id);
+            return View(ent);
         }
 
         // POST: PropietarioController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Propietario p)
+        public ActionResult Edit(int id, Propietario ent)
         {
             try
             {
-                repositorio.Modificacion(p);
+                repositorio.Modificacion(ent);
                 TempData["Mensaje"] = "Propietario modificado con éxito!";
                 return RedirectToAction(nameof(Index));
             }
             catch (SqlException e)
             {
                 TempData["Error"] = e.Number + " " + e.Message;
-                return View(p);
+                return View(ent);
             }
             catch (Exception e)
             {
                 TempData["Error"] = "Ocurrió un error inesperado.";
-                return View(p);
+                return View(ent);
             }
         }
 
         // GET: PropietarioController/Delete/5
         public ActionResult Delete(int id)
         {
-            var p = repositorio.Obtener(id);
-            return View(p);
+            var ent = repositorio.Obtener(id);
+            return View(ent);
         }
 
         // POST: PropietarioController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Propietario p)
+        public ActionResult Delete(int id, Propietario ent)
         {
             try
             {

@@ -30,8 +30,8 @@ namespace BDInmoSturniolo.Controllers
         // GET: InquilinoController/Details/5
         public ActionResult Details(int id)
         {
-            var p = repositorio.Obtener(id);
-            return View(p);
+            var ent = repositorio.Obtener(id);
+            return View(ent);
         }
 
         // GET: InquilinoController/Create
@@ -43,11 +43,11 @@ namespace BDInmoSturniolo.Controllers
         // POST: InquilinoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Inquilino i)
+        public ActionResult Create(Inquilino ent)
         {
             try
             {
-                int res = repositorio.Alta(i);
+                int res = repositorio.Alta(ent);
                 TempData["Mensaje"] = $"Inquilino creado con éxito! Id: {res}";
                 return RedirectToAction(nameof(Index));
             }
@@ -66,44 +66,44 @@ namespace BDInmoSturniolo.Controllers
         // GET: InquilinoController/Edit/5
         public ActionResult Edit(int id)
         {
-            var i = repositorio.Obtener(id);
-            return View(i);
+            var ent = repositorio.Obtener(id);
+            return View(ent);
         }
 
         // POST: InquilinoController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Inquilino i)
+        public ActionResult Edit(int id, Inquilino ent)
         {
             try
             {
-                repositorio.Modificacion(i);
+                repositorio.Modificacion(ent);
                 TempData["Mensaje"] = "Inquilino modificado con éxito!";
                 return RedirectToAction(nameof(Index));
             }
             catch (SqlException e)
             {
                 TempData["Error"] = e.Number + " " + e.Message;
-                return View(i);
+                return View(ent);
             }
             catch (Exception e)
             {
                 TempData["Error"] = "Ocurrió un error inesperado.";
-                return View(i);
+                return View(ent);
             }
         }
 
         // GET: InquilinoController/Delete/5
         public ActionResult Delete(int id)
         {
-            var i = repositorio.Obtener(id);
-            return View(i);
+            var ent = repositorio.Obtener(id);
+            return View(ent);
         }
 
         // POST: InquilinoController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Inquilino i)
+        public ActionResult Delete(int id, Inquilino ent)
         {
             try
             {

@@ -1,4 +1,5 @@
 using BDInmoSturniolo.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BDInmoSturniolo
@@ -24,6 +26,19 @@ namespace BDInmoSturniolo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Home/Login";
+                    options.LogoutPath = "/Home/Logout";
+                    options.AccessDeniedPath = "/Home/Restringido";
+                });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
+            });
+
             services.AddControllersWithViews();
 
             services.AddTransient<IRepositorio<Propietario>, RepositorioPropietario>();
@@ -31,6 +46,7 @@ namespace BDInmoSturniolo
             services.AddTransient<IRepositorioInmueble, RepositorioInmueble>();
             services.AddTransient<IRepositorio<Contrato>, RepositorioContrato>();
             services.AddTransient<IRepositorio<Pago>, RepositorioPago>();
+            services.AddTransient<IRepositorio<Usuario>, RepositorioUsuario>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
