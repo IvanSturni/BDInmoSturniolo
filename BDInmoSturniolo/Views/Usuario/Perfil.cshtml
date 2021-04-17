@@ -1,0 +1,38 @@
+﻿@model BDInmoSturniolo.Models.Usuario
+
+@{
+    ViewData["Title"] = "Perfil";
+}
+
+<h1><i class="bi bi-person">   </i>Perfil</h1>
+
+<div>
+    <hr />
+    <img width="128" src="@Model.Avatar"/>
+    <br />
+    <h4>@Html.DisplayFor(model => model.Apellido) @Html.DisplayFor(model => model.Nombre)</h4>
+    <br />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Rol)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RolNombre)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index" asp-controller="Home">Ir al Inicio</a>
+</div>

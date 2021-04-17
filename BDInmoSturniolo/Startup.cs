@@ -36,7 +36,7 @@ namespace BDInmoSturniolo
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
+                options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
             });
 
             services.AddControllersWithViews();
@@ -46,7 +46,7 @@ namespace BDInmoSturniolo
             services.AddTransient<IRepositorioInmueble, RepositorioInmueble>();
             services.AddTransient<IRepositorio<Contrato>, RepositorioContrato>();
             services.AddTransient<IRepositorio<Pago>, RepositorioPago>();
-            services.AddTransient<IRepositorio<Usuario>, RepositorioUsuario>();
+            services.AddTransient<IRepositorioUsuario, RepositorioUsuario>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,6 +67,7 @@ namespace BDInmoSturniolo
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

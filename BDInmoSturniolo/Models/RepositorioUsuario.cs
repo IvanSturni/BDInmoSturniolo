@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BDInmoSturniolo.Models
 {
-    public class RepositorioUsuario : RepositorioBase, IRepositorio<Usuario>
+    public class RepositorioUsuario : RepositorioBase, IRepositorioUsuario
     {
         public RepositorioUsuario(IConfiguration configuration) : base(configuration)
         {
@@ -106,6 +106,40 @@ namespace BDInmoSturniolo.Models
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     command.Parameters.AddWithValue("@id", id);
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        res = new Usuario
+                        {
+                            Id = reader.GetInt32(0),
+                            Nombre = reader.GetString(1),
+                            Apellido = reader.GetString(2),
+                            Email = reader.GetString(3),
+                            Clave = reader.GetString(4),
+                            Avatar = reader.GetString(5),
+                            Rol = reader.GetInt32(6)
+                        };
+                    }
+                    connection.Close();
+                }
+            }
+
+            return res;
+        }
+
+        public Usuario ObtenerPorEmail(string email)
+        {
+            Usuario res = null;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string sql = $"SELECT {nameof(Usuario.Id)}, {nameof(Usuario.Nombre)}, {nameof(Usuario.Apellido)}, " +
+                    $"{nameof(Usuario.Email)}, {nameof(Usuario.Clave)}, {nameof(Usuario.Avatar)}, {nameof(Usuario.Rol)} " +
+                    $"FROM Usuarios WHERE {nameof(Usuario.Email)}=@email;";
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@email", email);
                     connection.Open();
                     SqlDataReader reader = command.ExecuteReader();
                     if (reader.Read())

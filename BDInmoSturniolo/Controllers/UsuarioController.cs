@@ -1,6 +1,7 @@
 ﻿using BDInmoSturniolo.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,17 +13,18 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BDInmoSturniolo.Controllers
 {
     public class UsuarioController : Controller
     {
-        private readonly IRepositorio<Usuario> repositorio;
+        private readonly IRepositorioUsuario repositorio;
         private readonly IConfiguration configuration;
         private readonly IWebHostEnvironment environment;
 
-        public UsuarioController(IRepositorio<Usuario> repositorio, IWebHostEnvironment environment, IConfiguration configuration)
+        public UsuarioController(IRepositorioUsuario repositorio, IWebHostEnvironment environment, IConfiguration configuration)
         {
             this.repositorio = repositorio;
             this.environment = environment;
@@ -153,7 +155,7 @@ namespace BDInmoSturniolo.Controllers
                 ViewBag.Roles = Usuario.ObtenerRoles();
                 return View(ent);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 TempData["Error"] = "Ocurrió un error inesperado.";
                 ViewBag.Roles = Usuario.ObtenerRoles();
@@ -192,7 +194,7 @@ namespace BDInmoSturniolo.Controllers
                 }
                 return RedirectToAction(nameof(Index)); ;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 TempData["Error"] = "Ocurrió un error inesperado.";
                 return RedirectToAction(nameof(Index)); ;
@@ -203,6 +205,59 @@ namespace BDInmoSturniolo.Controllers
         public ActionResult Login()
         {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Login(LoginView login)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                        password: login.Clave,
+                        salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
+                        prf: KeyDerivationPrf.HMACSHA1,
+                        iterationCount: 1000,
+                        numBytesRequested: 256 / 8));
+
+                    var ent = repositorio.ObtenerPorEmail(login.Usuario);
+                    if (ent == null || ent.Clave != hashed)
+                    {
+                        ModelState.AddModelError("", "El email o la clave no son correctos");
+                        return View();
+                    }
+
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, ent.Email),
+                        new Claim("FullName", ent.Nombre + " " + ent.Apellido),
+                        new Claim(ClaimTypes.Role, ent.RolNombre),
+                    };
+
+                    var claimsIdentity = new ClaimsIdentity(
+                        claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity));
+                }
+
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View();
+            }
+        }
+
+        [Authorize]
+        public ActionResult Perfil()
+        {
+            var ent = repositorio.ObtenerPorEmail(User.Identity.Name);
+            return View(ent);
         }
 
         public IActionResult Autenticado()
