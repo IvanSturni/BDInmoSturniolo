@@ -21,6 +21,11 @@ namespace BDInmoSturniolo.Models
         [DisplayName("Fecha Final"), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = false)]
         [DataType(DataType.Date)]
         public DateTime FechaFinal { get; set; }
+        [DisplayName("Fecha Cancelación"), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = false)]
+        [DataType(DataType.Date)]
+        public DateTime? FechaCancelacion { get; set; }
+        [DisplayName("Vigente")]
+        public bool esVigente => (DateTime.Now < (FechaCancelacion ?? FechaFinal) && FechaInicio <= DateTime.Now);
         [DisplayName("Inquilino")]
         public int InquilinoId { get; set; }
         [DisplayName("Inmueble")]
