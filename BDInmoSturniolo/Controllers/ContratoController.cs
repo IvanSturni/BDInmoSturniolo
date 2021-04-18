@@ -116,7 +116,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: ContratoController/Delete/5
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         public ActionResult Delete(int id)
         {
             var ent = repositorio.Obtener(id);
@@ -126,7 +126,7 @@ namespace BDInmoSturniolo.Controllers
         // POST: ContratoController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         public ActionResult Delete(int id, Contrato ent)
         {
             try
