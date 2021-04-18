@@ -4,11 +4,14 @@
     ViewData["Title"] = "Crear nuevo";
     List<Propietario> propietarios = ViewBag.Propietarios;
 
+    bool esParaPropietario = ViewData.ContainsKey("ParaPropietario");
+    int paraPropietario = ViewBag.ParaPropietario ?? 0;
+
     string mensaje = TempData["Mensaje"] + "";
     string error = TempData["Error"] + "";
 }
 
-<h1>Crear Nuevo</h1>
+<h1><i class="bi bi-plus-circle">   </i>Crear nuevo</h1>
 
 <h4>Inmueble</h4>
 
@@ -79,7 +82,7 @@
                 <select class="form-control" name="PropietarioId">
                     @foreach (Propietario p in propietarios)
                     {
-                        <option value="@p.Id">@p.Nombre @p.Apellido</option>
+                        @:<option @(esParaPropietario && p.Id == paraPropietario ? "selected" : "") value="@p.Id">@p.Nombre @p.Apellido</option>
                     }
                 </select>
                 <span asp-validation-for="PropietarioId" class="text-danger"></span>
@@ -92,7 +95,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Volver a la lista</a>
+    <a asp-action="@(!esParaPropietario ? "Index" : "PorPropietario")" asp-route-id="@(!esParaPropietario ? "" : paraPropietario)">Volver a la lista</a>
 </div>
 
 @section Scripts {

@@ -38,7 +38,10 @@
                                         <a class="dropdown-item text-dark" asp-area="" asp-controller="Inquilino" asp-action="Index"><i class="bi bi-file-person">    </i>Inquilinos</a>
                                         <a class="dropdown-item text-dark" asp-area="" asp-controller="Contrato" asp-action="Index"><i class="bi bi-calendar4-range">   </i>Contratos</a>
                                         <a class="dropdown-item text-dark" asp-area="" asp-controller="Pago" asp-action="Index"><i class="bi bi-credit-card-fill">   </i>Pagos</a>
-                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Usuario" asp-action="Index"><i class="bi bi-people-fill">   </i>Usuarios</a>
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Usuario" asp-action="Index"><i class="bi bi-people-fill">   </i>Usuarios</a>
+                                        }
                                     </div>
                                 </div>
                             </li>
@@ -59,7 +62,7 @@
                                         @User.Identity.Name
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Usuario" asp-action=""><i class="bi bi-person">    </i>Perfil</a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Usuario" asp-action="Perfil"><i class="bi bi-person">    </i>Perfil</a>
                                         <hr />
                                         <a class="dropdown-item text-danger" asp-area="" asp-controller="Usuario" asp-action="Logout"><i class="bi bi-box-arrow-right">   </i>Salir</a>
                                     </div>

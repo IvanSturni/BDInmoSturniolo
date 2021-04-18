@@ -32,6 +32,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: UsuarioController
+        [Authorize(Policy = "Admin")]
         public ActionResult Index()
         {
             IList<Usuario> lista = repositorio.ObtenerTodos();
@@ -39,6 +40,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: UsuarioController/Details/5
+        [Authorize(Policy = "Admin")]
         public ActionResult Details(int id)
         {
             var ent = repositorio.Obtener(id);
@@ -46,6 +48,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: UsuarioController/Create
+        [Authorize(Policy = "Admin")]
         public ActionResult Create()
         {
             ViewBag.Roles = Usuario.ObtenerRoles();
@@ -55,8 +58,11 @@ namespace BDInmoSturniolo.Controllers
         // POST: UsuarioController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Admin")]
         public ActionResult Create(Usuario ent)
         {
+            if (!ModelState.IsValid)
+                return View();
             try
             {
                 string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
@@ -104,6 +110,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: UsuarioController/Edit/5
+        [Authorize(Policy = "Admin")]
         public ActionResult Edit(int id)
         {
             var ent = repositorio.Obtener(id);
@@ -111,13 +118,30 @@ namespace BDInmoSturniolo.Controllers
             return View(ent);
         }
 
+        // GET: UsuarioController/EditarPerfil
+        [Authorize]
+        public ActionResult EditarPerfil()
+        {
+            var ent = repositorio.ObtenerPorEmail(User.Identity.Name);
+            ViewBag.Roles = Usuario.ObtenerRoles();
+            return View("Edit", ent);
+        }
+
         // POST: UsuarioController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit(int id, Usuario ent)
         {
             try
             {
+                if (!User.IsInRole("Admin"))
+                {
+                    var usuarioActual = repositorio.ObtenerPorEmail(User.Identity.Name);
+                    if (usuarioActual.Id != id)//si no es admin, solo puede modificarse él mismo
+                        return RedirectToAction(nameof(Index), "Home");
+                }
+
                 string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                         password: ent.Clave,
                         salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
@@ -125,6 +149,7 @@ namespace BDInmoSturniolo.Controllers
                         iterationCount: 1000,
                         numBytesRequested: 256 / 8));
                 ent.Clave = hashed;
+                ent.Rol = User.IsInRole("Admin") ? ent.Rol : (int)enRoles.Empleado;
                 var entOriginal = repositorio.Obtener(id);
                 ent.Avatar = entOriginal.Avatar;
                 if (ent.AvatarFile != null)
@@ -146,8 +171,15 @@ namespace BDInmoSturniolo.Controllers
                 }
 
                 repositorio.Modificacion(ent);
-                TempData["Mensaje"] = "Usuario modificado con éxito!";
-                return RedirectToAction(nameof(Index));
+
+                if (!User.IsInRole("Admin"))
+                {
+                    return RedirectToAction(nameof(Perfil));
+                } else
+                {
+                    TempData["Mensaje"] = "Usuario modificado con éxito!";
+                    return RedirectToAction(nameof(Index));
+                }
             }
             catch (SqlException e)
             {
@@ -164,6 +196,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: UsuarioController/Delete/5
+        [Authorize(Policy = "Admin")]
         public ActionResult Delete(int id)
         {
             var ent = repositorio.Obtener(id);
@@ -173,6 +206,7 @@ namespace BDInmoSturniolo.Controllers
         // POST: UsuarioController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Admin")]
         public ActionResult Delete(int id, Usuario ent)
         {
             try
@@ -202,6 +236,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: UsuarioController/Login/
+        [AllowAnonymous]
         public ActionResult Login()
         {
             return View();
@@ -209,6 +244,7 @@ namespace BDInmoSturniolo.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<ActionResult> Login(LoginView login)
         {
             try
@@ -253,6 +289,7 @@ namespace BDInmoSturniolo.Controllers
             }
         }
 
+        // GET: UsuarioController/Perfil
         [Authorize]
         public ActionResult Perfil()
         {
@@ -260,16 +297,19 @@ namespace BDInmoSturniolo.Controllers
             return View(ent);
         }
 
+        [Authorize]
         public IActionResult Autenticado()
         {
             return View();
         }
 
+        [Authorize]
         public IActionResult SuperPrivado()
         {
             return View();
         }
 
+        [Authorize]
         public async Task<ActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

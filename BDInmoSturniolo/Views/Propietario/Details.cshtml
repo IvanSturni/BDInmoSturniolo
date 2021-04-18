@@ -56,5 +56,6 @@
 </div>
 <div>
     <a asp-action="Edit" title="Editar" asp-route-id="@Model.Id"><i class="bi bi-pencil-fill"></i> Editar</a> |
+    <a asp-controller="Inmueble" asp-action="PorPropietario" asp-route-id="@Model.Id"><i class="bi bi-house-fill"></i> Ver Inmuebles</a> | 
     <a asp-action="Index">Volver a la lista</a>
 </div>

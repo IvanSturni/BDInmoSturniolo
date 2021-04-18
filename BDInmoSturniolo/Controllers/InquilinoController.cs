@@ -1,4 +1,5 @@
 ﻿using BDInmoSturniolo.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +22,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: InquilinoController
+        [Authorize]
         public ActionResult Index()
         {
             IList<Inquilino> lista = repositorio.ObtenerTodos();
@@ -28,6 +30,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: InquilinoController/Details/5
+        [Authorize]
         public ActionResult Details(int id)
         {
             var ent = repositorio.Obtener(id);
@@ -35,6 +38,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: InquilinoController/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -43,6 +47,7 @@ namespace BDInmoSturniolo.Controllers
         // POST: InquilinoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create(Inquilino ent)
         {
             try
@@ -64,6 +69,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: InquilinoController/Edit/5
+        [Authorize]
         public ActionResult Edit(int id)
         {
             var ent = repositorio.Obtener(id);
@@ -73,6 +79,7 @@ namespace BDInmoSturniolo.Controllers
         // POST: InquilinoController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit(int id, Inquilino ent)
         {
             try
@@ -94,6 +101,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: InquilinoController/Delete/5
+        [Authorize]
         public ActionResult Delete(int id)
         {
             var ent = repositorio.Obtener(id);
@@ -103,6 +111,7 @@ namespace BDInmoSturniolo.Controllers
         // POST: InquilinoController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Delete(int id, Inquilino ent)
         {
             try

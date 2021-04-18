@@ -44,7 +44,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
-            <th width="100px"></th>
+            <th width="@(User.IsInRole("Admin") ? "100" : "70")px"></th>
         </tr>
     </thead>
     <tbody>
@@ -65,8 +65,11 @@
                 </td>
                 <td>
                     <a asp-action="Edit" title="Editar" asp-route-id="@item.Id"><i class="bi bi-pencil-fill"></i></a> |
-                    <a asp-action="Details" title="Detalles" asp-route-id="@item.Id"><i class="bi bi-file-earmark-text-fill text-info"></i></a> |
-                    <a asp-action="Delete" title="Eliminar" asp-route-id="@item.Id"><i class="bi bi-trash-fill text-danger"></i></a>
+                    <a asp-action="Details" title="Detalles" asp-route-id="@item.Id"><i class="bi bi-file-earmark-text-fill text-info"></i></a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <span> | <a asp-action="Delete" title="Eliminar" asp-route-id="@item.Id"><i class="bi bi-trash-fill text-danger"></i></a></span>
+                    }
                 </td>
             </tr>
         }

@@ -23,6 +23,11 @@ namespace BDInmoSturniolo.Controllers
             return View();
         }
 
+        public IActionResult Restringido()
+        {
+            return View(nameof(Index));
+        }
+
         public IActionResult Privacy()
         {
             return View();

@@ -1,4 +1,5 @@
 ﻿using BDInmoSturniolo.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +25,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: ContratoController
+        [Authorize]
         public ActionResult Index()
         {
             IList<Contrato> lista = repositorio.ObtenerTodos();
@@ -31,6 +33,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: ContratoController/Details/5
+        [Authorize]
         public ActionResult Details(int id)
         {
             var ent = repositorio.Obtener(id);
@@ -38,6 +41,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: ContratoController/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.Inquilinos = repositorioInquilino.ObtenerTodos();
@@ -48,6 +52,7 @@ namespace BDInmoSturniolo.Controllers
         // POST: ContratoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create(Contrato ent)
         {
             try
@@ -73,6 +78,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: ContratoController/Edit/5
+        [Authorize]
         public ActionResult Edit(int id)
         {
             var ent = repositorio.Obtener(id);
@@ -84,6 +90,7 @@ namespace BDInmoSturniolo.Controllers
         // POST: ContratoController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit(int id, Contrato ent)
         {
             try
@@ -109,6 +116,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: ContratoController/Delete/5
+        [Authorize]
         public ActionResult Delete(int id)
         {
             var ent = repositorio.Obtener(id);
@@ -118,6 +126,7 @@ namespace BDInmoSturniolo.Controllers
         // POST: ContratoController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Delete(int id, Contrato ent)
         {
             try

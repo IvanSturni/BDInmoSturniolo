@@ -29,8 +29,8 @@ namespace BDInmoSturniolo
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LoginPath = "/Home/Login";
-                    options.LogoutPath = "/Home/Logout";
+                    options.LoginPath = "/Usuario/Login";
+                    options.LogoutPath = "/Usuario/Logout";
                     options.AccessDeniedPath = "/Home/Restringido";
                 });
 
@@ -45,7 +45,7 @@ namespace BDInmoSturniolo
             services.AddTransient<IRepositorio<Inquilino>, RepositorioInquilino>();
             services.AddTransient<IRepositorioInmueble, RepositorioInmueble>();
             services.AddTransient<IRepositorio<Contrato>, RepositorioContrato>();
-            services.AddTransient<IRepositorio<Pago>, RepositorioPago>();
+            services.AddTransient<IRepositorioPago, RepositorioPago>();
             services.AddTransient<IRepositorioUsuario, RepositorioUsuario>();
         }
 

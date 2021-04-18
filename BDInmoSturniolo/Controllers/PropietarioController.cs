@@ -1,4 +1,5 @@
 ﻿using BDInmoSturniolo.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +22,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: PropietarioController
+        [Authorize]
         public ActionResult Index()
         {
             IList<Propietario> lista = repositorio.ObtenerTodos();
@@ -28,6 +30,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: PropietarioController/Details/5
+        [Authorize]
         public ActionResult Details(int id)
         {
             var ent = repositorio.Obtener(id);
@@ -35,6 +38,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: PropietarioController/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -43,6 +47,7 @@ namespace BDInmoSturniolo.Controllers
         // POST: PropietarioController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create(Propietario ent)
         {
             try
@@ -64,6 +69,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: PropietarioController/Edit/5
+        [Authorize]
         public ActionResult Edit(int id)
         {
             var ent = repositorio.Obtener(id);
@@ -73,6 +79,7 @@ namespace BDInmoSturniolo.Controllers
         // POST: PropietarioController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit(int id, Propietario ent)
         {
             try
@@ -94,6 +101,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: PropietarioController/Delete/5
+        [Authorize]
         public ActionResult Delete(int id)
         {
             var ent = repositorio.Obtener(id);
@@ -103,6 +111,7 @@ namespace BDInmoSturniolo.Controllers
         // POST: PropietarioController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Delete(int id, Propietario ent)
         {
             try

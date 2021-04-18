@@ -47,7 +47,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.InmuebleId)  <i class="bi bi-house-fill"></i>
             </th>
-            <th width="100px"></th>
+            <th>
+                Pagos
+            </th>
+            <th width="@(User.IsInRole("Admin") ? "100" : "70")px"></th>
         </tr>
     </thead>
     <tbody>
@@ -70,9 +73,15 @@
                     @Html.DisplayFor(modelItem => item.Inmueble.Direccion), Id @Html.DisplayFor(modelItem => item.InmuebleId)
                 </td>
                 <td>
+                    <a asp-controller="Pago" asp-action="PorContrato" asp-route-id="@item.Id">Ver Pagos <i class="bi bi-credit-card-fill"></i></a>
+                </td>
+                <td>
                     <a asp-action="Edit" title="Editar" asp-route-id="@item.Id"><i class="bi bi-pencil-fill"></i></a> |
-                    <a asp-action="Details" title="Detalles" asp-route-id="@item.Id"><i class="bi bi-file-earmark-text-fill text-info"></i></a> |
-                    <a asp-action="Delete" title="Eliminar" asp-route-id="@item.Id"><i class="bi bi-trash-fill text-danger"></i></a>
+                    <a asp-action="Details" title="Detalles" asp-route-id="@item.Id"><i class="bi bi-file-earmark-text-fill text-info"></i></a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <span> | <a asp-action="Delete" title="Eliminar" asp-route-id="@item.Id"><i class="bi bi-trash-fill text-danger"></i></a></span>
+                    }
                 </td>
             </tr>
         }

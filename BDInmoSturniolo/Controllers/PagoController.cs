@@ -1,4 +1,5 @@
 ﻿using BDInmoSturniolo.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -12,23 +13,40 @@ namespace BDInmoSturniolo.Controllers
 {
     public class PagoController : Controller
     {
-        private readonly IRepositorio<Pago> repositorio;
+        private readonly IRepositorioPago repositorio;
         private readonly IRepositorio<Contrato> repositorioContrato;
 
-        public PagoController(IRepositorio<Pago> repositorio, IRepositorio<Contrato> repositorioContrato)
+        public PagoController(IRepositorioPago repositorio, IRepositorio<Contrato> repositorioContrato)
         {
             this.repositorio = repositorio;
             this.repositorioContrato = repositorioContrato;
         }
 
         // GET: PagoController
+        [Authorize]
         public ActionResult Index()
         {
             IList<Pago> lista = repositorio.ObtenerTodos();
             return View(lista);
         }
 
+        // GET: InmuebleController/PorPropietario/5
+        [Authorize]
+        public ActionResult PorContrato(int id)
+        {
+            if (id == 0)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                IList<Pago> lista = repositorio.ObtenerPorContrato(id);
+                return View("Index", lista);
+            }
+        }
+
         // GET: PagoController/Details/5
+        [Authorize]
         public ActionResult Details(int id)
         {
             var ent = repositorio.Obtener(id);
@@ -36,6 +54,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: PagoController/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.Contratos = repositorioContrato.ObtenerTodos();
@@ -45,6 +64,7 @@ namespace BDInmoSturniolo.Controllers
         // POST: PagoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create(Pago ent)
         {
             try
@@ -68,6 +88,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: PagoController/Edit/5
+        [Authorize]
         public ActionResult Edit(int id)
         {
             var ent = repositorio.Obtener(id);
@@ -78,6 +99,7 @@ namespace BDInmoSturniolo.Controllers
         // POST: PagoController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit(int id, Pago ent)
         {
             try
@@ -101,6 +123,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: PagoController/Delete/5
+        [Authorize]
         public ActionResult Delete(int id)
         {
             var ent = repositorio.Obtener(id);
@@ -110,6 +133,7 @@ namespace BDInmoSturniolo.Controllers
         // POST: PagoController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Delete(int id, Pago ent)
         {
             try

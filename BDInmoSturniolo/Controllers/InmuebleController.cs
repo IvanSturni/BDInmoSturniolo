@@ -1,4 +1,5 @@
 ﻿using BDInmoSturniolo.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +23,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: InmuebleController
+        [Authorize]
         public ActionResult Index()
         {
             IList<Inmueble> lista = repositorio.ObtenerTodos();
@@ -30,6 +32,7 @@ namespace BDInmoSturniolo.Controllers
 
 
         // GET: InmuebleController/PorPropietario/5
+        [Authorize]
         public ActionResult PorPropietario(int id)
         {
             if (id == 0)
@@ -38,12 +41,14 @@ namespace BDInmoSturniolo.Controllers
             }
             else
             {
+                ViewBag.Propietario = repositorioPropietario.Obtener(id);
                 IList<Inmueble> lista = repositorio.ObtenerPorPropietario(id);
                 return View("Index", lista);
             }
         }
 
         // GET: InmuebleController/Details/5
+        [Authorize]
         public ActionResult Details(int id)
         {
             var ent = repositorio.Obtener(id);
@@ -51,6 +56,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: InmuebleController/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.Usos = Inmueble.ObtenerUsos();
@@ -58,9 +64,20 @@ namespace BDInmoSturniolo.Controllers
             return View();
         }
 
+        // GET: InmuebleController/Create
+        [Authorize]
+        public ActionResult CrearParaPropietario(int id)
+        {
+            ViewBag.Usos = Inmueble.ObtenerUsos();
+            ViewBag.Propietarios = repositorioPropietario.ObtenerTodos();
+            ViewBag.ParaPropietario = id;
+            return View("Create");
+        }
+
         // POST: InmuebleController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create(Inmueble ent)
         {
             try
@@ -86,6 +103,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: InmuebleController/Edit/5
+        [Authorize]
         public ActionResult Edit(int id)
         {
             var ent = repositorio.Obtener(id);
@@ -97,6 +115,7 @@ namespace BDInmoSturniolo.Controllers
         // POST: InmuebleController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit(int id, Inmueble ent)
         {
             try
@@ -122,6 +141,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: InmuebleController/Delete/5
+        [Authorize]
         public ActionResult Delete(int id)
         {
             var ent = repositorio.Obtener(id);
@@ -131,6 +151,7 @@ namespace BDInmoSturniolo.Controllers
         // POST: InmuebleController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Delete(int id, Inmueble ent)
         {
             try
