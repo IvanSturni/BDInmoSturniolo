@@ -42,26 +42,20 @@
 <table class="table">
     <thead>
         <tr>
-            <th width="60px">
+            <th maxwidth="60px">
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
+                @Html.DisplayNameFor(model => model.EsDisponible)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Uso)
+                @Html.DisplayNameFor(model => model.Direccion)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Tipo)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Ambientes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Superficie)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Direccion)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Precio)
@@ -80,22 +74,16 @@
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
+                @Html.DisplayFor(modelItem => item.EsDisponible)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UsoNombre)
+                @Html.DisplayFor(modelItem => item.Direccion)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Tipo)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Ambientes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Superficie)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Direccion)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Precio)

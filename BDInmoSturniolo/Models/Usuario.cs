@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,6 +28,7 @@ namespace BDInmoSturniolo.Models
 		[Required, DataType(DataType.Password)]
 		public string Clave { get; set; }
 		public string Avatar { get; set; }
+		[DisplayName("Avatar")]
 		[DataType(DataType.Upload)]
 		public IFormFile AvatarFile { get; set; }
 		public int Rol { get; set; }

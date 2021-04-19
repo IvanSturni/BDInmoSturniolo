@@ -1,12 +1,14 @@
 ﻿@model IEnumerable<BDInmoSturniolo.Models.Contrato>
 
 @{
-    ViewData["Title"] = "Contratos";
+    ViewData["Title"] = "Contratos Vigentes";
     string mensaje = TempData["Mensaje"] + "";
     string error = TempData["Error"] + "";
+
+    bool esCancelamiento = ViewData.ContainsKey("Cancelar");
 }
 
-<h1><i class="bi bi-calendar4-range">   </i>Contratos</h1>
+<h1><i class="bi bi-calendar4-range">   </i>Contratos @(esCancelamiento ? " Vigentes" : "")</h1>
 
 @if (mensaje.Length != 0)
 {
@@ -25,14 +27,17 @@
     </div>
 }
 
+@if (!esCancelamiento)
+{
 <p>
     <a asp-action="Create"><i class="bi bi-plus-circle"></i>   Crear Nuevo</a>
 </p>
+}
 
 <table class="table">
     <thead>
         <tr>
-            <th width="60px">
+            <th maxwidth="60px">
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
@@ -47,6 +52,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.InmuebleId)  <i class="bi bi-house-fill"></i>
             </th>
+            @if (!esCancelamiento)
+            {
+            <th>
+                @Html.DisplayNameFor(model => model.EsVigente)
+            </th>
+            }
             <th>
                 Pagos
             </th>
@@ -56,34 +67,56 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FechaInicio)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FechaFinal)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Inquilino.Nombre) @Html.DisplayFor(modelItem => item.Inquilino.Apellido)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Inmueble.Direccion), Id @Html.DisplayFor(modelItem => item.InmuebleId)
-                </td>
-                <td>
-                    <a asp-controller="Pago" asp-action="PorContrato" asp-route-id="@item.Id">Ver Pagos <i class="bi bi-credit-card-fill"></i></a>
-                </td>
-                <td>
-                    <a asp-action="Edit" title="Editar" asp-route-id="@item.Id"><i class="bi bi-pencil-fill"></i></a> |
-                    <a asp-action="Details" title="Detalles" asp-route-id="@item.Id"><i class="bi bi-file-earmark-text-fill text-info"></i></a>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <span> | <a asp-action="Delete" title="Eliminar" asp-route-id="@item.Id"><i class="bi bi-trash-fill text-danger"></i></a></span>
-                    }
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaInicio)
+            </td>
+            <td>
+                @if (item.FechaCancelacion.HasValue)
+                {
+                    <span class="text-danger">@Html.DisplayFor(modelItem => item.FechaCancelacion)</span>
+                }
+                else
+                {
+                    <span>@Html.DisplayFor(modelItem => item.FechaFinal)</span>
+                }
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Inquilino.Nombre) @Html.DisplayFor(modelItem => item.Inquilino.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Inmueble.Direccion), Id @Html.DisplayFor(modelItem => item.InmuebleId)
+            </td>
+            @if (!esCancelamiento)
+            {
+            <td>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" disabled @(item.EsVigente ? "checked" : "")/>
+                </div>
+            </td>
+            }
+            <td>
+                <a asp-controller="Pago" asp-action="PorContrato" asp-route-id="@item.Id">Ver Pagos <i class="bi bi-credit-card-fill"></i></a>
+            </td>
+            <td>
+                @if (esCancelamiento)
+                {
+                    <a asp-action="Cancelar" title="Cancelar" asp-route-id="@item.Id"><i class="bi bi-x text-danger"></i></a>
+                } else
+                {
+                <span><a asp-action="Edit" title="Editar" asp-route-id="@item.Id"><i class="bi bi-pencil-fill"></i></a> |
+                <a asp-action="Details" title="Detalles" asp-route-id="@item.Id"><i class="bi bi-file-earmark-text-fill text-info"></i></a></span>
+                @if (User.IsInRole("Admin"))
+                {
+                    <span> | <a asp-action="Delete" title="Eliminar" asp-route-id="@item.Id"><i class="bi bi-trash-fill text-danger"></i></a></span>
+                }
+                }
+            </td>
+        </tr>
         }
     </tbody>
 </table>

@@ -1,0 +1,82 @@
+﻿@model BDInmoSturniolo.Models.Contrato
+
+@{
+    ViewData["Title"] = "Cancelar Contrato";
+    Inquilino inquilino = Model.Inquilino;
+
+    string mensaje = TempData["Mensaje"] + "";
+    string error = TempData["Error"] + "";
+}
+
+<h1><i class="bi bi-x text-danger">   </i>Cancelar</h1>
+
+<h4>@Model.GetType().Name</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Cancelar">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <dl class="row">
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Id)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Id)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Monto)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Monto)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.InquilinoId)  <i class="bi bi-file-person"></i>
+                </dt>
+                <dd class="col-sm-8">
+                    @inquilino.Nombre @inquilino.Apellido, Id @inquilino.Id
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.InmuebleId)  <i class="bi bi-house-fill"></i>
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Inmueble.Direccion), Id @Html.DisplayFor(model => model.InmuebleId)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.FechaInicio)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.FechaInicio)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.FechaFinal)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.FechaFinal)
+                </dd>
+                <dt class="col-sm-6 text-danger">
+                    Fecha de Cancelamiento
+                </dt>
+                <dd class="col-sm-8 text-danger">
+                    @DateTime.Now.ToString("dd/MM/yyyy")
+                </dd>
+                <dt class="col-sm-6 text-danger">
+                    Multa a pagar
+                </dt>
+                <dd class="col-sm-8 text-danger">
+                    $@Model.CalcularMulta()
+                </dd>
+            </dl>
+            <div class="form-group">
+                <input type="submit" value="Confirmar Cancelamiento" class="btn btn-danger" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Vigentes">Volver a la lista</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

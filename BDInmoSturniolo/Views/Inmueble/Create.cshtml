@@ -78,6 +78,11 @@
                 <span asp-validation-for="Precio" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="EsDisponible" class="control-label"></label>
+                <input asp-for="EsDisponible" class="form-control" />
+                <span asp-validation-for="EsDisponible" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="PropietarioId" class="control-label"></label>  <i class="bi bi-file-person-fill"></i>
                 <select class="form-control" name="PropietarioId">
                     @foreach (Propietario p in propietarios)

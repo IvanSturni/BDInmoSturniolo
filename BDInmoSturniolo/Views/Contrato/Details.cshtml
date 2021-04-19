@@ -30,6 +30,27 @@
             @Html.DisplayFor(model => model.FechaFinal)
         </dd>
         <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Monto)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Monto)
+        </dd>
+        @if (Model.FechaCancelacion.HasValue)
+        {
+            <dt class="col-sm-2 text-danger">
+                @Html.DisplayNameFor(model => model.FechaCancelacion)
+            </dt>
+            <dd class="col-sm-10 text-danger">
+                @Html.DisplayFor(model => model.FechaCancelacion)
+            </dd>
+            <dt class="col-sm-2 text-danger">
+                @Html.DisplayNameFor(model => model.Multa)
+            </dt>
+            <dd class="col-sm-10 text-danger">
+                @Html.DisplayFor(model => model.Multa)
+            </dd>
+        }
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.InquilinoId)  <i class="bi bi-file-person"></i>
         </dt>
         <dd class="col-sm-10">

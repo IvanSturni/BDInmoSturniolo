@@ -14,9 +14,9 @@ namespace BDInmoSturniolo.Controllers
     public class PagoController : Controller
     {
         private readonly IRepositorioPago repositorio;
-        private readonly IRepositorio<Contrato> repositorioContrato;
+        private readonly IRepositorioContrato repositorioContrato;
 
-        public PagoController(IRepositorioPago repositorio, IRepositorio<Contrato> repositorioContrato)
+        public PagoController(IRepositorioPago repositorio, IRepositorioContrato repositorioContrato)
         {
             this.repositorio = repositorio;
             this.repositorioContrato = repositorioContrato;

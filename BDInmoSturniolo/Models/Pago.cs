@@ -13,7 +13,7 @@ namespace BDInmoSturniolo.Models
         [Key]
         public int Id { get; set; }
 
-        [Required, DisplayName("Mes"), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = false)]
+        [Required, DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = false)]
         [DataType(DataType.Date)]
         public DateTime Fecha { get; set; }
         [Required, DataType(DataType.Currency)]

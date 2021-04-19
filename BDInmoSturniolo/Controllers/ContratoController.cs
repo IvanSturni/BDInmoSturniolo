@@ -13,11 +13,11 @@ namespace BDInmoSturniolo.Controllers
 {
     public class ContratoController : Controller
     {
-        private readonly IRepositorio<Contrato> repositorio;
+        private readonly IRepositorioContrato repositorio;
         private readonly IRepositorio<Inquilino> repositorioInquilino;
         private readonly IRepositorioInmueble repositorioInmueble;
 
-        public ContratoController(IRepositorio<Contrato> repositorio, IRepositorioInmueble repositorioInmueble, IRepositorio<Inquilino> repositorioInquilino)
+        public ContratoController(IRepositorioContrato repositorio, IRepositorioInmueble repositorioInmueble, IRepositorio<Inquilino> repositorioInquilino)
         {
             this.repositorio = repositorio;
             this.repositorioInquilino = repositorioInquilino;
@@ -30,6 +30,34 @@ namespace BDInmoSturniolo.Controllers
         {
             IList<Contrato> lista = repositorio.ObtenerTodos();
             return View(lista);
+        }
+
+        // GET: ContratoController/Cancelar
+        [Authorize(Policy = "Admin")]
+        public ActionResult Vigentes()
+        {
+            IList<Contrato> lista = repositorio.ObtenerVigentes();
+            ViewBag.Cancelar = true;
+            return View("Index",lista);
+        }
+
+        // GET: ContratoController/ConfirmarCancelar
+        [Authorize(Policy = "Admin")]
+        public ActionResult Cancelar(int id)
+        {
+            var ent = repositorio.Obtener(id);
+            return View(ent);
+        }
+
+        // GET: ContratoController/ConfirmarCancelar
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Admin")]
+        public ActionResult Cancelar(int id, Contrato ent)
+        {
+            repositorio.Cancelar(id);
+            TempData["Mensaje"] = "Contrato cancelado con éxito!";
+            return RedirectToAction(nameof(Vigentes));
         }
 
         // GET: ContratoController/Details/5

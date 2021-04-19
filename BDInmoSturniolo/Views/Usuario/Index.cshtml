@@ -34,20 +34,14 @@
 <table class="table">
     <thead>
         <tr>
-            <th width="60px">
+            <th maxwidth="60px">
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Apellido)
+                Nombre Completo
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Clave)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Avatar)
@@ -66,16 +60,10 @@
                     @Html.DisplayFor(modelItem => item.Id)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Nombre)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Apellido)
+                    @Html.DisplayFor(modelItem => item.Apellido) @Html.DisplayFor(modelItem => item.Nombre)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Clave)
                 </td>
                 <td style="padding-top: 4px; padding-bottom: 4px;">
                     <img width="46" src="@item.Avatar" />

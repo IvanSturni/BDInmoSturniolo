@@ -44,7 +44,7 @@ namespace BDInmoSturniolo
             services.AddTransient<IRepositorio<Propietario>, RepositorioPropietario>();
             services.AddTransient<IRepositorio<Inquilino>, RepositorioInquilino>();
             services.AddTransient<IRepositorioInmueble, RepositorioInmueble>();
-            services.AddTransient<IRepositorio<Contrato>, RepositorioContrato>();
+            services.AddTransient<IRepositorioContrato, RepositorioContrato>();
             services.AddTransient<IRepositorioPago, RepositorioPago>();
             services.AddTransient<IRepositorioUsuario, RepositorioUsuario>();
         }

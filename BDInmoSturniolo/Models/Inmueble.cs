@@ -31,9 +31,10 @@ namespace BDInmoSturniolo.Models
         [Required]
         public string Direccion { get; set; }
         [Required]
+        [DataType(DataType.Currency)]
         public decimal Precio { get; set; }
         [DisplayName("Disponible")]
-        public bool esDisponible { get; set; } = true;
+        public bool EsDisponible { get; set; } = true;
         [DisplayName("Dueño")]
         public int PropietarioId { get; set; }
         [ForeignKey(nameof(PropietarioId))]
