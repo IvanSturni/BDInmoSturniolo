@@ -74,7 +74,46 @@ namespace BDInmoSturniolo.Controllers
         {
             ViewBag.Inquilinos = repositorioInquilino.ObtenerTodos();
             ViewBag.Inmuebles = repositorioInmueble.ObtenerTodos();
+            ViewBag.FechaInicio = DateTime.Now;
             return View();
+        }
+
+        // GET: ContratoController/Create
+        [Authorize]
+        public ActionResult CrearPara(int id)
+        {
+            ViewBag.Inquilinos = repositorioInquilino.ObtenerTodos();
+            ViewBag.Inmuebles = repositorioInmueble.ObtenerTodos();
+            ViewBag.FechaInicio = TempData.ContainsKey("FechaInicio") ? TempData["FechaInicio"] : DateTime.Now;
+            ViewBag.FechaFinal = TempData.ContainsKey("FechaFinal") ? TempData["FechaFinal"] : null;
+            ViewBag.paraIdInmueble = id;
+            return View(nameof(Create));
+        }
+
+        // GET: ContratoController/Renovar/5
+        [Authorize]
+        public ActionResult Renovar(int id)
+        {
+            try
+            {
+                Contrato prev = repositorio.Obtener(id);
+                Contrato ent = new Contrato
+                {
+                    FechaInicio = prev.FechaFinal,
+                    FechaFinal = prev.FechaFinal.AddMonths(12),
+                    Monto = prev.Inmueble.Precio,
+                    InquilinoId = prev.InquilinoId,
+                    InmuebleId = prev.InmuebleId
+                };
+                ViewBag.Inquilinos = repositorioInquilino.ObtenerTodos();
+                ViewBag.Inmuebles = repositorioInmueble.ObtenerTodos();
+                return View(ent);
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = "Ocurrió un error inesperado.";
+                return View(nameof(Vigentes));
+            }
         }
 
         // POST: ContratoController/Create
@@ -105,14 +144,24 @@ namespace BDInmoSturniolo.Controllers
             }
         }
 
+
         // GET: ContratoController/Edit/5
         [Authorize]
         public ActionResult Edit(int id)
         {
-            var ent = repositorio.Obtener(id);
-            ViewBag.Inquilinos = repositorioInquilino.ObtenerTodos();
-            ViewBag.Inmuebles = repositorioInmueble.ObtenerTodos();
-            return View(ent);
+            try
+            {
+                var ent = repositorio.Obtener(id);
+                if (ent == null) throw new Exception("No se encontró el Contrato indicado.");
+                ViewBag.Inquilinos = repositorioInquilino.ObtenerTodos();
+                ViewBag.Inmuebles = repositorioInmueble.ObtenerTodos();
+                return View(ent);
+            }
+            catch (Exception e)
+            {
+                TempData["Error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // POST: ContratoController/Edit/5
@@ -147,8 +196,17 @@ namespace BDInmoSturniolo.Controllers
         [Authorize(Policy = "Admin")]
         public ActionResult Delete(int id)
         {
-            var ent = repositorio.Obtener(id);
-            return View(ent);
+            try
+            {
+                var ent = repositorio.Obtener(id);
+                if (ent == null) throw new Exception("No se encontró el Contrato indicado.");
+                return View(ent);
+            }
+            catch (Exception e)
+            {
+                TempData["Error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // POST: ContratoController/Delete/5

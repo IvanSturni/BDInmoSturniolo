@@ -15,11 +15,13 @@ namespace BDInmoSturniolo.Controllers
     {
         private readonly IRepositorioInmueble repositorio;
         private readonly IRepositorio<Propietario> repositorioPropietario;
+        private readonly IRepositorioContrato repositorioContrato;
 
-        public InmuebleController(IRepositorioInmueble repositorio, IRepositorio<Propietario> repositorioPropietario)
+        public InmuebleController(IRepositorioInmueble repositorio, IRepositorio<Propietario> repositorioPropietario, IRepositorioContrato repositorioContrato)
         {
             this.repositorio = repositorio;
             this.repositorioPropietario = repositorioPropietario;
+            this.repositorioContrato = repositorioContrato;
         }
 
         // GET: InmuebleController
@@ -28,6 +30,33 @@ namespace BDInmoSturniolo.Controllers
         {
             IList<Inmueble> lista = repositorio.ObtenerTodos();
             return View(lista);
+        }
+
+        // GET: InmuebleController
+        [Authorize]
+        public ActionResult Disponible()
+        {
+            IList<Inmueble> lista = repositorio.ObtenerDisponibles();
+            return View(lista);
+        }
+
+        // GET: InmuebleController
+        [HttpPost]
+        [Authorize]
+        public ActionResult Disponible(FechasView f)
+        {
+            IList<Inmueble> lista = repositorio.ObtenerDisponiblesEntreFechas(f.FechaInicio, f.FechaFinal);
+            ViewBag.Fechas = f;
+            TempData["FechaInicio"] = f.FechaInicio;
+            TempData["FechaFinal"] = f.FechaFinal;
+
+            return View(lista);
+        }
+
+        [Authorize]
+        public ActionResult Fechas()
+        {
+            return View();
         }
 
 

@@ -1,16 +1,19 @@
 ﻿@model IEnumerable<BDInmoSturniolo.Models.Inmueble>
 
 @{
-    ViewData["Title"] = "Inmuebles";
+    ViewData["Title"] = "Inmuebles Disponibles";
     string mensaje = TempData["Mensaje"] + "";
     string error = TempData["Error"] + "";
 
-    bool esPorProp = ViewData.ContainsKey("Propietario");
-    Propietario p = ViewBag.Propietario ?? new Propietario();
+
+    bool esFechas = ViewData.ContainsKey("Fechas");
+    FechasView fechas = esFechas ? ViewBag.Fechas : new FechasView();
+    string entreFechas = " entre " + fechas.FechaInicio.ToString("dd/MM/yyyy") + " y " + fechas.FechaFinal.ToString("dd/MM/yyyy");
+
 
 }
 
-<h1><i class="bi bi-house-fill">   </i>Inmuebles@(esPorProp ? " de " + p.Apellido + " " + p.Nombre : "")</h1>
+<h1><i class="bi bi-house-fill">   </i>Inmuebles Disponibles@(esFechas ? entreFechas : "")</h1>
 
 @if (mensaje.Length != 0)
 {
@@ -29,24 +32,11 @@
     </div>
 }
 
-<p>
-    <a asp-action="@(!esPorProp ? "Create" : "CrearParaPropietario")" asp-route-id="@(esPorProp ? p.Id : "")">
-        <i class="bi bi-plus-circle"></i>   Crear Nuevo@(esPorProp ? " para Propietario "+p.Apellido+" "+p.Nombre : "")
-    </a>
-    @if (esPorProp)
-    {
-        <span> | <a asp-controller="Inmueble" asp-action="Index">Ver Todos</a></span>
-    }
-</p>
-
 <table class="table">
     <thead>
         <tr>
             <th maxwidth="60px">
                 @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EsDisponible)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Direccion)
@@ -63,7 +53,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.PropietarioId)  <i class="bi bi-file-person-fill"></i>
             </th>
-            <th width="@(User.IsInRole("Admin") ? "100" : "70")px"></th>
+            <th width="@(User.IsInRole("Admin") ? "100" : "50")px"></th>
         </tr>
     </thead>
     <tbody>
@@ -72,12 +62,6 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @if (item.EsDisponible)
-                {
-                    <span><i class="bi bi-check-circle-fill text-success"></i></span>
-                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Direccion)
@@ -95,12 +79,8 @@
                 @Html.DisplayFor(modelItem => item.Duenio.Nombre) @Html.DisplayFor(modelItem => item.Duenio.Apellido)
             </td>
             <td>
-                <a asp-action="Edit" title="Editar" asp-route-id="@item.Id"><i class="bi bi-pencil-fill"></i></a> |
                 <a asp-action="Details" title="Detalles" asp-route-id="@item.Id"><i class="bi bi-file-earmark-text-fill text-info"></i></a>
-                @if (User.IsInRole("Admin"))
-                {
-                    <span> | <a asp-action="Delete" title="Eliminar" asp-route-id="@item.Id"><i class="bi bi-trash-fill text-danger"></i></a></span>
-                }
+                <a asp-controller="Contrato" asp-action="CrearPara" title="Crear Contrato" asp-route-id="@item.Id"><i class="bi bi-file-earmark-text-fill"></i></a>
             </td>
         </tr>
         }

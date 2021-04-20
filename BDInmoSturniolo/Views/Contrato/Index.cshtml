@@ -5,10 +5,10 @@
     string mensaje = TempData["Mensaje"] + "";
     string error = TempData["Error"] + "";
 
-    bool esCancelamiento = ViewData.ContainsKey("Cancelar");
+    bool verVigentes = ViewData.ContainsKey("Cancelar");
 }
 
-<h1><i class="bi bi-calendar4-range">   </i>Contratos @(esCancelamiento ? " Vigentes" : "")</h1>
+<h1><i class="bi bi-calendar4-range">   </i>Contratos @(verVigentes ? " Vigentes" : "")</h1>
 
 @if (mensaje.Length != 0)
 {
@@ -27,7 +27,7 @@
     </div>
 }
 
-@if (!esCancelamiento)
+@if (!verVigentes)
 {
 <p>
     <a asp-action="Create"><i class="bi bi-plus-circle"></i>   Crear Nuevo</a>
@@ -37,7 +37,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th maxwidth="60px">
+            <th width="60px">
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
@@ -52,7 +52,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.InmuebleId)  <i class="bi bi-house-fill"></i>
             </th>
-            @if (!esCancelamiento)
+            @if (!verVigentes)
             {
             <th>
                 @Html.DisplayNameFor(model => model.EsVigente)
@@ -91,21 +91,20 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Inmueble.Direccion), Id @Html.DisplayFor(modelItem => item.InmuebleId)
             </td>
-            @if (!esCancelamiento)
+            @if (!verVigentes)
             {
             <td>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" disabled @(item.EsVigente ? "checked" : "")/>
-                </div>
+                <i class="bi bi-@(item.EsVigente ? "check-circle-fill text-success" : "x-circle text-danger")"></i>
             </td>
             }
             <td>
                 <a asp-controller="Pago" asp-action="PorContrato" asp-route-id="@item.Id">Ver Pagos <i class="bi bi-credit-card-fill"></i></a>
             </td>
             <td>
-                @if (esCancelamiento)
+                @if (verVigentes)
                 {
-                    <a asp-action="Cancelar" title="Cancelar" asp-route-id="@item.Id"><i class="bi bi-x text-danger"></i></a>
+                    <span><a asp-action="Renovar" title="Renovar" asp-route-id="@item.Id"><i class="bi bi-calendar2-plus-fill text-success"></i></a> | 
+                    <a asp-action="Cancelar" title="Cancelar" asp-route-id="@item.Id"><i class="bi bi-x-square-fill text-danger"></i></a></span>
                 } else
                 {
                 <span><a asp-action="Edit" title="Editar" asp-route-id="@item.Id"><i class="bi bi-pencil-fill"></i></a> |

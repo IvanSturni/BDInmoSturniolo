@@ -52,11 +52,6 @@
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <a class="dropdown-item text-dark" asp-area="" asp-controller="Contrato" asp-action="Vigentes">Cancelar Contrato</a>
-                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Pago" asp-action="Index"><i class="bi bi-credit-card-fill">   </i>Pagos</a>
-                                        @if (User.IsInRole("Admin"))
-                                        {
-                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Usuario" asp-action="Index"><i class="bi bi-people-fill">   </i>Usuarios</a>
-                                        }
                                     </div>
                                 </div>
                             </li>
@@ -67,11 +62,8 @@
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <a class="dropdown-item text-dark" asp-area="" asp-controller="Contrato" asp-action="Vigentes">Contratos Vigentes</a>
-                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Pago" asp-action="Index"><i class="bi bi-credit-card-fill">   </i>Pagos</a>
-                                        @if (User.IsInRole("Admin"))
-                                        {
-                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Usuario" asp-action="Index"><i class="bi bi-people-fill">   </i>Usuarios</a>
-                                        }
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Inmueble" asp-action="Disponible">Inmuebles Disponibles</a>
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Inmueble" asp-action="Fechas">Disp. entre Fechas</a>
                                     </div>
                                 </div>
                             </li>

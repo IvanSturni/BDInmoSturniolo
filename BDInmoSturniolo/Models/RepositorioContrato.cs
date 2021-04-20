@@ -124,7 +124,8 @@ namespace BDInmoSturniolo.Models
             {
                 string sql = $"SELECT c.{nameof(Contrato.Id)}, {nameof(Contrato.FechaInicio)}, {nameof(Contrato.FechaFinal)}, " +
                     $"{nameof(Contrato.FechaCancelacion)}, {nameof(Contrato.Monto)}, {nameof(Contrato.InquilinoId)}, {nameof(Contrato.InmuebleId)}, " +
-                    $"{nameof(Contrato.Inquilino.Nombre)}, {nameof(Contrato.Inquilino.Apellido)}, {nameof(Contrato.Inmueble.Direccion)} " +
+                    $"{nameof(Contrato.Inquilino.Nombre)}, {nameof(Contrato.Inquilino.Apellido)}, {nameof(Contrato.Inmueble.Direccion)}, " +
+                    $"{nameof(Contrato.Inmueble.Precio)} " +
                     $"FROM Contratos c " +
                     $"INNER JOIN Inquilinos inq ON c.InquilinoId = inq.Id " +
                     $"INNER JOIN Inmuebles inm ON c.InmuebleId = inm.Id " +
@@ -154,7 +155,8 @@ namespace BDInmoSturniolo.Models
                             Inmueble = new Inmueble
                             {
                                 Id = reader.GetInt32(6),
-                                Direccion = reader.GetString(9)
+                                Direccion = reader.GetString(9),
+                                Precio = reader.GetDecimal(10)
                             }
                         };
                     }
@@ -173,7 +175,8 @@ namespace BDInmoSturniolo.Models
             {
                 string sql = $"SELECT c.{nameof(Contrato.Id)}, {nameof(Contrato.FechaInicio)}, {nameof(Contrato.FechaFinal)}, " +
                     $"{nameof(Contrato.FechaCancelacion)}, {nameof(Contrato.Monto)}, {nameof(Contrato.InquilinoId)}, {nameof(Contrato.InmuebleId)}, " +
-                    $"{nameof(Contrato.Inquilino.Nombre)}, {nameof(Contrato.Inquilino.Apellido)}, {nameof(Contrato.Inmueble.Direccion)} " +
+                    $"{nameof(Contrato.Inquilino.Nombre)}, {nameof(Contrato.Inquilino.Apellido)}, {nameof(Contrato.Inmueble.Direccion)}, " +
+                    $"{nameof(Contrato.Inmueble.Precio)} " +
                     $"FROM Contratos c " +
                     $"INNER JOIN Inquilinos inq ON c.InquilinoId = inq.Id " +
                     $"INNER JOIN Inmuebles inm ON c.InmuebleId = inm.Id;";
@@ -201,7 +204,8 @@ namespace BDInmoSturniolo.Models
                             Inmueble = new Inmueble
                             {
                                 Id = reader.GetInt32(6),
-                                Direccion = reader.GetString(9)
+                                Direccion = reader.GetString(9),
+                                Precio = reader.GetDecimal(10)
                             }
                         });
                     }
@@ -219,7 +223,8 @@ namespace BDInmoSturniolo.Models
             {
                 string sql = $"SELECT c.{nameof(Contrato.Id)}, {nameof(Contrato.FechaInicio)}, {nameof(Contrato.FechaFinal)}, " +
                     $"{nameof(Contrato.FechaCancelacion)}, {nameof(Contrato.Monto)}, {nameof(Contrato.InquilinoId)}, {nameof(Contrato.InmuebleId)}, " +
-                    $"{nameof(Contrato.Inquilino.Nombre)}, {nameof(Contrato.Inquilino.Apellido)}, {nameof(Contrato.Inmueble.Direccion)} " +
+                    $"{nameof(Contrato.Inquilino.Nombre)}, {nameof(Contrato.Inquilino.Apellido)}, {nameof(Contrato.Inmueble.Direccion)}, " +
+                    $"{nameof(Contrato.Inmueble.Precio)} " +
                     $"FROM Contratos c " +
                     $"INNER JOIN Inquilinos inq ON c.InquilinoId = inq.Id " +
                     $"INNER JOIN Inmuebles inm ON c.InmuebleId = inm.Id;";
@@ -247,7 +252,8 @@ namespace BDInmoSturniolo.Models
                             Inmueble = new Inmueble
                             {
                                 Id = reader.GetInt32(6),
-                                Direccion = reader.GetString(9)
+                                Direccion = reader.GetString(9),
+                                Precio = reader.GetDecimal(10)
                             }
                         };
                         if (x.EsVigente)

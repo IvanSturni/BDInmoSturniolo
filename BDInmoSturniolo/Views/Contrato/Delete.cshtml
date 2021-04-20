@@ -18,6 +18,12 @@
             @Html.DisplayFor(model => model.Id)
         </dd>
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EsVigente)
+        </dt>
+        <dd class = "col-sm-10">
+            <i class="bi bi-@(Model.EsVigente ? "check-circle-fill text-success" : "x-circle text-danger")"></i>
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.FechaInicio)
         </dt>
         <dd class = "col-sm-10">
