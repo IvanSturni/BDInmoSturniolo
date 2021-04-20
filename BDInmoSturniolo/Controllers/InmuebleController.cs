@@ -70,7 +70,9 @@ namespace BDInmoSturniolo.Controllers
             }
             else
             {
-                ViewBag.Propietario = repositorioPropietario.Obtener(id);
+                Propietario ent = repositorioPropietario.Obtener(id);
+                if (ent == null) return RedirectToAction(nameof(Index));
+                ViewBag.Propietario = ent;
                 IList<Inmueble> lista = repositorio.ObtenerPorPropietario(id);
                 return View("Index", lista);
             }
@@ -81,6 +83,7 @@ namespace BDInmoSturniolo.Controllers
         public ActionResult Details(int id)
         {
             var ent = repositorio.Obtener(id);
+            if (ent == null) return RedirectToAction(nameof(Index));
             return View(ent);
         }
 
@@ -136,6 +139,7 @@ namespace BDInmoSturniolo.Controllers
         public ActionResult Edit(int id)
         {
             var ent = repositorio.Obtener(id);
+            if (ent == null) return RedirectToAction(nameof(Index));
             ViewBag.Usos = Inmueble.ObtenerUsos();
             ViewBag.Propietarios = repositorioPropietario.ObtenerTodos();
             return View(ent);
@@ -174,6 +178,7 @@ namespace BDInmoSturniolo.Controllers
         public ActionResult Delete(int id)
         {
             var ent = repositorio.Obtener(id);
+            if (ent == null) return RedirectToAction(nameof(Index));
             return View(ent);
         }
 

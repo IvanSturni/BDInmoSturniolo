@@ -34,6 +34,7 @@ namespace BDInmoSturniolo.Controllers
         public ActionResult Details(int id)
         {
             var ent = repositorio.Obtener(id);
+            if (ent == null) return RedirectToAction(nameof(Index));
             return View(ent);
         }
 
@@ -73,6 +74,7 @@ namespace BDInmoSturniolo.Controllers
         public ActionResult Edit(int id)
         {
             var ent = repositorio.Obtener(id);
+            if (ent == null) return RedirectToAction(nameof(Index));
             return View(ent);
         }
 
@@ -105,6 +107,7 @@ namespace BDInmoSturniolo.Controllers
         public ActionResult Delete(int id)
         {
             var ent = repositorio.Obtener(id);
+            if (ent == null) return RedirectToAction(nameof(Index));
             return View(ent);
         }
 

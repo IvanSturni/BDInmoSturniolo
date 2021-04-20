@@ -33,7 +33,7 @@ namespace BDInmoSturniolo.Controllers
         }
 
         // GET: ContratoController/Cancelar
-        [Authorize(Policy = "Admin")]
+        [Authorize]
         public ActionResult Vigentes()
         {
             IList<Contrato> lista = repositorio.ObtenerVigentes();
@@ -41,18 +41,30 @@ namespace BDInmoSturniolo.Controllers
             return View("Index",lista);
         }
 
+        // GET: ContratoController/Cancelar
+        [Authorize]
+        public ActionResult PorInmueble(int id)
+        {
+            IList<Contrato> lista = repositorio.ObtenerPorInmueble(id);
+            Inmueble ent = repositorioInmueble.Obtener(id);
+            if (ent == null) return RedirectToAction(nameof(Index));
+            ViewBag.PorInmueble = ent;
+            return View("Index", lista);
+        }
+
         // GET: ContratoController/ConfirmarCancelar
-        [Authorize(Policy = "Admin")]
+        [Authorize]
         public ActionResult Cancelar(int id)
         {
             var ent = repositorio.Obtener(id);
+            if (ent == null) return RedirectToAction(nameof(Index));
             return View(ent);
         }
 
         // GET: ContratoController/ConfirmarCancelar
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Policy = "Admin")]
+        [Authorize]
         public ActionResult Cancelar(int id, Contrato ent)
         {
             repositorio.Cancelar(id);
@@ -65,6 +77,7 @@ namespace BDInmoSturniolo.Controllers
         public ActionResult Details(int id)
         {
             var ent = repositorio.Obtener(id);
+            if (ent == null) return RedirectToAction(nameof(Index));
             return View(ent);
         }
 

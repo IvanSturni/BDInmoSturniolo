@@ -4,9 +4,12 @@
     ViewData["Title"] = "Pagos";
     string mensaje = TempData["Mensaje"] + "";
     string error = TempData["Error"] + "";
+
+    bool esPorCont = ViewData.ContainsKey("Contrato");
+    Contrato c = ViewBag.Contrato ?? new Contrato();
 }
 
-<h1><i class="bi bi-credit-card-fill">   </i>Pagos</h1>
+<h1><i class="bi bi-credit-card-fill">   </i>Pagos@(esPorCont ? " de " + c.Inquilino.Apellido + " en " + c.Inmueble.Direccion : "")</h1>
 
 @if (mensaje.Length != 0)
 {
@@ -28,7 +31,13 @@
 }
 
 <p>
-    <a asp-action="Create"><i class="bi bi-plus-circle"></i>   Crear Nuevo</a>
+    <a asp-action="@(!esPorCont ? "Create" : "CrearParaContrato")" asp-route-id="@(esPorCont ? c.Id : "")">
+        <i class="bi bi-plus-circle"></i>   Crear Nuevo@(esPorCont ? " de "+c.Inquilino.Apellido+" en "+c.Inmueble.Direccion : "")
+    </a>
+    @if (esPorCont)
+    {
+        <span> | <a asp-controller="Pago" asp-action="Index">Ver Todos</a></span>
+    }
 </p>
 
 <table class="table">

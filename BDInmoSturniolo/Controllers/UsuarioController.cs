@@ -44,6 +44,7 @@ namespace BDInmoSturniolo.Controllers
         public ActionResult Details(int id)
         {
             var ent = repositorio.Obtener(id);
+            if (ent == null) return RedirectToAction(nameof(Index));
             return View(ent);
         }
 
@@ -114,6 +115,7 @@ namespace BDInmoSturniolo.Controllers
         public ActionResult Edit(int id)
         {
             var ent = repositorio.Obtener(id);
+            if (ent == null) return RedirectToAction(nameof(Index));
             ViewBag.Roles = Usuario.ObtenerRoles();
             return View(ent);
         }
@@ -155,8 +157,11 @@ namespace BDInmoSturniolo.Controllers
                 if (ent.AvatarFile != null)
                 {
                     string path = Path.Combine(environment.WebRootPath, "uploads");
-                    FileSystem.DeleteFile(Path.Combine(path, Path.GetFileName(ent.Avatar)));
-
+                    if (Path.GetFileName(ent.Avatar) != "avatarDefault.png")
+                    {
+                        if (FileSystem.FileExists(Path.Combine(path, Path.GetFileName(ent.Avatar))))
+                            FileSystem.DeleteFile(Path.Combine(path, Path.GetFileName(ent.Avatar)));
+                    }
                     if (!Directory.Exists(path))
                     {
                         Directory.CreateDirectory(path);
@@ -200,6 +205,7 @@ namespace BDInmoSturniolo.Controllers
         public ActionResult Delete(int id)
         {
             var ent = repositorio.Obtener(id);
+            if (ent == null) return RedirectToAction(nameof(Index));
             return View(ent);
         }
 
@@ -215,7 +221,8 @@ namespace BDInmoSturniolo.Controllers
                 repositorio.Baja(id);
                 if (filename != "avatarDefault.png")
                 {
-                    FileSystem.DeleteFile(Path.Combine(environment.WebRootPath, "uploads", filename));
+                    if (FileSystem.FileExists(Path.Combine(environment.WebRootPath, "uploads", filename)))
+                        FileSystem.DeleteFile(Path.Combine(environment.WebRootPath, "uploads", filename));
                 }
                 TempData["Mensaje"] = "Usuario eliminado con éxito!";
                 return RedirectToAction(nameof(Index));

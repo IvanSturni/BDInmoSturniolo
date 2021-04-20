@@ -36,11 +36,14 @@ namespace BDInmoSturniolo.Controllers
         {
             if (id == 0)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
             else
             {
                 IList<Pago> lista = repositorio.ObtenerPorContrato(id);
+                Contrato c = repositorioContrato.Obtener(id);
+                if (c == null) return RedirectToAction(nameof(Index));
+                ViewBag.Contrato = c;
                 return View("Index", lista);
             }
         }
@@ -50,6 +53,7 @@ namespace BDInmoSturniolo.Controllers
         public ActionResult Details(int id)
         {
             var ent = repositorio.Obtener(id);
+            if (ent == null) return RedirectToAction(nameof(Index));
             return View(ent);
         }
 
@@ -59,6 +63,15 @@ namespace BDInmoSturniolo.Controllers
         {
             ViewBag.Contratos = repositorioContrato.ObtenerTodos();
             return View();
+        }
+
+        // GET: PagoController/Create
+        [Authorize]
+        public ActionResult CrearParaContrato(int id)
+        {
+            ViewBag.Contratos = repositorioContrato.ObtenerTodos();
+            ViewBag.ParaContrato = id;
+            return View("Create");
         }
 
         // POST: PagoController/Create
@@ -92,6 +105,7 @@ namespace BDInmoSturniolo.Controllers
         public ActionResult Edit(int id)
         {
             var ent = repositorio.Obtener(id);
+            if (ent == null) return RedirectToAction(nameof(Index));
             ViewBag.Contratos = repositorioContrato.ObtenerTodos();
             return View(ent);
         }
@@ -127,6 +141,7 @@ namespace BDInmoSturniolo.Controllers
         public ActionResult Delete(int id)
         {
             var ent = repositorio.Obtener(id);
+            if (ent == null) return RedirectToAction(nameof(Index));
             return View(ent);
         }
 
