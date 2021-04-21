@@ -137,6 +137,8 @@ namespace BDInmoSturniolo.Controllers
         {
             try
             {
+                if (repositorioInmueble.ObtenerDisponiblesEntreFechas(ent.FechaInicio, ent.FechaFinal, ent.InmuebleId).Count() == 0)
+                    throw new Exception("El inmueble seleccionado no se encuentra disponible en las fechas indicadas.");
                 int res = repositorio.Alta(ent);
                 TempData["Mensaje"] = $"Contrato creado con éxito! Id: {res}";
                 return RedirectToAction(nameof(Index));
@@ -146,14 +148,14 @@ namespace BDInmoSturniolo.Controllers
                 TempData["Error"] = e.Number + " " + e.Message;
                 ViewBag.Inquilinos = repositorioInquilino.ObtenerTodos();
                 ViewBag.Inmuebles = repositorioInmueble.ObtenerTodos();
-                return View();
+                return View(ent);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                TempData["Error"] = "Ocurrió un error inesperado.";
+                TempData["Error"] = e.Message;
                 ViewBag.Inquilinos = repositorioInquilino.ObtenerTodos();
                 ViewBag.Inmuebles = repositorioInmueble.ObtenerTodos();
-                return View();
+                return View(ent);
             }
         }
 
@@ -185,6 +187,8 @@ namespace BDInmoSturniolo.Controllers
         {
             try
             {
+                if (repositorioInmueble.ObtenerDisponiblesEntreFechas(ent.FechaInicio, ent.FechaFinal, ent.InmuebleId).Count() == 0)
+                    throw new Exception("El inmueble seleccionado no se encuentra disponible en las fechas indicadas.");
                 repositorio.Modificacion(ent);
                 TempData["Mensaje"] = "Contrato modificado con éxito!";
                 return RedirectToAction(nameof(Index));
@@ -248,5 +252,6 @@ namespace BDInmoSturniolo.Controllers
                 return RedirectToAction(nameof(Index)); ;
             }
         }
+
     }
 }

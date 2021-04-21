@@ -315,5 +315,6 @@ namespace BDInmoSturniolo.Models
 
             return lista;
         }
+
     }
 }

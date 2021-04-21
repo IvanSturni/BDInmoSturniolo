@@ -242,7 +242,7 @@ namespace BDInmoSturniolo.Models
             return lista;
         }
 
-        public IList<Inmueble> ObtenerDisponiblesEntreFechas(DateTime fi, DateTime ff)
+        public IList<Inmueble> ObtenerDisponiblesEntreFechas(DateTime fi, DateTime ff, int IdInm = 0)
         {
             IList<Inmueble> lista = new List<Inmueble>();
 
@@ -251,21 +251,28 @@ namespace BDInmoSturniolo.Models
                 string sql = $"SELECT i.{nameof(Inmueble.Id)}, {nameof(Inmueble.Descripcion)}, {nameof(Inmueble.Uso)}, {nameof(Inmueble.Tipo)}, " +
                     $"{nameof(Inmueble.Ambientes)}, {nameof(Inmueble.Superficie)}, " +
                     $"{nameof(Inmueble.Direccion)}, {nameof(Inmueble.Precio)}, {nameof(Inmueble.EsDisponible)}, {nameof(Inmueble.PropietarioId)}, " +
-                    $"{nameof(Inmueble.Duenio.Nombre)}, {nameof(Inmueble.Duenio.Apellido)}, {nameof(Inmueble.Duenio.Dni)}, " +
-                    $"{nameof(Contrato.FechaInicio)}, {nameof(Contrato.FechaFinal)}, {nameof(Contrato.FechaCancelacion)} " +
+                    $"{nameof(Inmueble.Duenio.Nombre)}, {nameof(Inmueble.Duenio.Apellido)}, {nameof(Inmueble.Duenio.Dni)} " +
                     $"FROM Inmuebles i INNER JOIN Propietarios p ON i.PropietarioId = p.Id " +
-                    $"LEFT JOIN Contratos c ON c.InmuebleId = i.Id " +
                     $"WHERE i.EsDisponible = 1 " +
-                    $"ORDER BY i.Id ASC;";
+                    $"AND i.{nameof(Inmueble.Id)} NOT IN " +
+                        $"(SELECT {nameof(Contrato.InmuebleId)} FROM Contratos " +
+                        $"WHERE (@fi >= FechaInicio AND @fi < ISNULL(FechaCancelacion, FechaFinal)) " +
+                        $"OR (@ff > FechaInicio AND @ff <= ISNULL(FechaCancelacion, FechaFinal)) " +
+                        $"OR (@fi <= FechaInicio AND @ff >= ISNULL(FechaCancelacion, FechaFinal))) ";
+                if (IdInm > 0)
+                    sql += $"AND i.{nameof(Inmueble.Id)} = @IdInm ";
+
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
+                    command.Parameters.AddWithValue("@fi", fi);
+                    command.Parameters.AddWithValue("@ff", ff);
+                    if (IdInm > 0)
+                        command.Parameters.AddWithValue("@IdInm", IdInm);
                     connection.Open();
                     SqlDataReader reader = command.ExecuteReader();
-                    int lastId = 0;
-                    bool lastIdGood = true;
                     while (reader.Read())
                     {
-                        Inmueble ent = new Inmueble
+                        lista.Add(new Inmueble
                         {
                             Id = reader.GetInt32(0),
                             Descripcion = reader.GetString(1),
@@ -284,37 +291,7 @@ namespace BDInmoSturniolo.Models
                                 Apellido = reader.GetString(11),
                                 Dni = reader.GetString(12)
                             }
-                        };
-                        if (reader.IsDBNull(13))
-                        {
-                            lista.Add(ent);
-                        } else
-                        {
-                            DateTime cInicio = reader.GetDateTime(13);
-                            DateTime cFinal = reader.IsDBNull(15) ? reader.GetDateTime(14) : reader.GetDateTime(15);
-                            if ((cInicio <= fi && fi < cFinal) || (cInicio < ff && ff <= cFinal) || (fi < cInicio && ff > cFinal))
-                            {
-                                // Si hay un conflicto
-                                
-                                // Y el inmueble ya se ha agregado antes
-                                if (lastId == ent.Id && lastIdGood)
-                                {
-                                    lista.Remove(lista.Last());
-                                }
-                                lastIdGood = false;
-                            } else
-                            {
-                                // Si no hay conflicto
-
-                                // Y el inmueble es diferente al anterior
-                                if (lastId != ent.Id)
-                                {
-                                    lista.Add(ent);
-                                    lastIdGood = true;
-                                }
-                            }
-                            lastId = ent.Id;
-                        }
+                        });
                     }
                 }
             }

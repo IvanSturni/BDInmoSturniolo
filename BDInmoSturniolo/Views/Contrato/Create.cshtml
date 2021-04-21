@@ -89,7 +89,14 @@
 </div>
 
 <div>
-    <a asp-action="Index">Volver a la lista</a>
+    @if (!(paraIdInmueble > 0))
+    {
+        <a asp-action="Index">Volver a la lista</a>
+    }
+    else
+    {
+        <a asp-controller="Inmueble" asp-action="Disponible">Volver a la lista</a>
+    }
 </div>
 
 @section Scripts {

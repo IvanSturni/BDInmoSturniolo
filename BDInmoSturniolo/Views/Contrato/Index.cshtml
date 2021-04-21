@@ -6,9 +6,11 @@
     string error = TempData["Error"] + "";
 
     bool verVigentes = ViewData.ContainsKey("Cancelar");
+    bool esPorInm = ViewData.ContainsKey("PorInmueble");
+    Inmueble inmu = ViewBag.PorInmueble ?? new Inmueble();
 }
 
-<h1><i class="bi bi-calendar4-range">   </i>Contratos @(verVigentes ? " Vigentes" : "")</h1>
+<h1><i class="bi bi-calendar4-range">   </i>Contratos @(verVigentes ? " Vigentes" : "")@(esPorInm ? (" de " + inmu.Direccion) : "")</h1>
 
 @if (mensaje.Length != 0)
 {
@@ -30,7 +32,14 @@
 @if (!verVigentes)
 {
 <p>
+    @if (esPorInm)
+    {
+    <span><a asp-controller="Contrato" asp-action="CrearPara" asp-route-id="@inmu.Id"><i class="bi bi-plus-circle"></i>   Crear Nuevo para @inmu.Direccion</a> | 
+    <a asp-action="Index">Ver Todos</a></span>
+    } else
+    {
     <a asp-action="Create"><i class="bi bi-plus-circle"></i>   Crear Nuevo</a>
+    }
 </p>
 }
 
@@ -47,21 +56,27 @@
                 @Html.DisplayNameFor(model => model.FechaFinal)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Monto)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.InquilinoId)  <i class="bi bi-file-person"></i>
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.InmuebleId)  <i class="bi bi-house-fill"></i>
-            </th>
+            @if (!esPorInm)
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model.InmuebleId)  <i class="bi bi-house-fill"></i>
+                </th>
+            }
             @if (!verVigentes)
             {
-            <th>
-                @Html.DisplayNameFor(model => model.EsVigente)
-            </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EsVigente)
+                </th>
             }
             <th>
                 Pagos
             </th>
-            <th width="@(User.IsInRole("Admin") ? "100" : "70")px"></th>
+            <th width="@(User.IsInRole("Admin") ? "130" : "70")px"></th>
         </tr>
     </thead>
     <tbody>
@@ -86,16 +101,22 @@
 
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Monto)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Inquilino.Nombre) @Html.DisplayFor(modelItem => item.Inquilino.Apellido)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Inmueble.Direccion), Id @Html.DisplayFor(modelItem => item.InmuebleId)
-            </td>
+            @if (!esPorInm)
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.Inmueble.Direccion), Id @Html.DisplayFor(modelItem => item.InmuebleId)
+                </td>
+            }
             @if (!verVigentes)
             {
-            <td>
-                <i class="bi bi-@(item.EsVigente ? "check-circle-fill text-success" : "x-circle text-danger")"></i>
-            </td>
+                <td>
+                    <i class="bi bi-@(item.EsVigente ? "check-circle-fill text-success" : "x-circle text-danger")"></i>
+                </td>
             }
             <td>
                 <a asp-controller="Pago" asp-action="PorContrato" asp-route-id="@item.Id">Ver Pagos <i class="bi bi-credit-card-fill"></i></a>
@@ -103,16 +124,21 @@
             <td>
                 @if (verVigentes)
                 {
-                    <span><a asp-action="Renovar" title="Renovar" asp-route-id="@item.Id"><i class="bi bi-calendar2-plus-fill text-success"></i></a> | 
-                    <a asp-action="Cancelar" title="Cancelar" asp-route-id="@item.Id"><i class="bi bi-x-square-fill text-danger"></i></a></span>
-                } else
-                {
-                <span><a asp-action="Edit" title="Editar" asp-route-id="@item.Id"><i class="bi bi-pencil-fill"></i></a> |
-                <a asp-action="Details" title="Detalles" asp-route-id="@item.Id"><i class="bi bi-file-earmark-text-fill text-info"></i></a></span>
-                @if (User.IsInRole("Admin"))
-                {
-                    <span> | <a asp-action="Delete" title="Eliminar" asp-route-id="@item.Id"><i class="bi bi-trash-fill text-danger"></i></a></span>
+                    <span>
+                        <a asp-action="Renovar" title="Renovar" asp-route-id="@item.Id"><i class="bi bi-calendar2-plus-fill text-success"></i></a> |
+                        <a asp-action="Cancelar" title="Cancelar" asp-route-id="@item.Id"><i class="bi bi-x-square-fill text-danger"></i></a>
+                    </span>
                 }
+                else
+                {
+                    <span>
+                        <a asp-action="Edit" title="Editar" asp-route-id="@item.Id"><i class="bi bi-pencil-fill"></i></a> |
+                        <a asp-action="Details" title="Detalles" asp-route-id="@item.Id"><i class="bi bi-file-earmark-text-fill text-info"></i></a>
+                    </span>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <span> | <a asp-action="Delete" title="Eliminar" asp-route-id="@item.Id"><i class="bi bi-trash-fill text-danger"></i></a></span>
+                    }
                 }
             </td>
         </tr>
