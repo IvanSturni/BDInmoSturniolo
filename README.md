@@ -1,6 +1,10 @@
 # BDInmoSturniolo
 Trabajo de la materia de .NET
 
+### Base de datos
+
+[BDInmoSturniolo/Data/Data.zip](BDInmoSturniolo/Data/Data.zip)
+
 ### Usuarios
 Administrador: admin@mail.com, admin;
 
