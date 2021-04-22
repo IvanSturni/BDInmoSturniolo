@@ -18,6 +18,9 @@ namespace BDInmoSturniolo.Models
         public DateTime Fecha { get; set; }
         [Required, DataType(DataType.Currency)]
         public decimal Importe { get; set; }
+        [DisplayName("Número de Pago")]
+        public int NumeroPago => 1 + Fecha.Month - (Contrato != null ? Contrato.FechaInicio.Month : Fecha.Month) +
+            (Fecha.Year - (Contrato != null ? Contrato.FechaInicio.Year : Fecha.Year)) * 12;
         [Required, DisplayName("Contrato")]
         public int ContratoId { get; set; }
         [ForeignKey(nameof(ContratoId))]

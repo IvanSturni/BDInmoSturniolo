@@ -6,4 +6,4 @@ Administrador: admin@mail.com, admin;
 
 Empleado: juan@mail.com, 1234;
 
-![imagen](diaw_04-17-2021_20-24-34.png)
+![imagen](diaw_04-22-2021_16-28-38.png)

@@ -108,9 +108,17 @@
             </td>
             @if (!esPorInm)
             {
-                <td>
-                    @Html.DisplayFor(modelItem => item.Inmueble.Direccion), Id @Html.DisplayFor(modelItem => item.InmuebleId)
-                </td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn p-0 dropdown-toggle text-primary" type="button" id="dropdownInmueble" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @Html.DisplayFor(modelItem => item.Inmueble.Direccion)
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownInmueble">
+                        <a class="dropdown-item text-dark" asp-action="PorInmueble" asp-route-id="@item.InmuebleId"><i class="bi bi-calendar4-range"> </i>Ver Contratos</a>
+                        <a class="dropdown-item text-dark" asp-controller="Inmueble" asp-action="Details" asp-route-id="@item.InmuebleId"><i class="bi bi-file-earmark-text-fill"> </i>Ver Detalles </a>
+                    </div>
+                </div>
+            </td>
             }
             @if (!verVigentes)
             {

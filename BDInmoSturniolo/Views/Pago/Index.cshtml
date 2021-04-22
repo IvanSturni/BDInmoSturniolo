@@ -52,9 +52,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.Importe)
             </th>
+            @if (!esPorCont)
+            {
             <th>
                 @Html.DisplayNameFor(model => model.ContratoId)  <i class="bi bi-calendar4-range"></i>
             </th>
+            }
             <th width="@(User.IsInRole("Admin") ? "100" : "70")px"></th>
         </tr>
     </thead>
@@ -71,10 +74,21 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Importe)
                 </td>
+                @if (!esPorCont)
+                {
                 <td>
-                    @Html.DisplayFor(modelItem => item.Contrato.Inquilino.Apellido) @Html.DisplayFor(modelItem => item.Contrato.Inquilino.Nombre)
-                     en @Html.DisplayFor(modelItem => item.Contrato.Inmueble.Direccion)
+                    <div class="dropdown">
+                        <button class="btn p-0 dropdown-toggle text-primary" type="button" id="dropdownContrato" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @Html.DisplayFor(modelItem => item.Contrato.Inquilino.Apellido) @Html.DisplayFor(modelItem => item.Contrato.Inquilino.Nombre)
+                            en @Html.DisplayFor(modelItem => item.Contrato.Inmueble.Direccion)
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownContrato">
+                            <a class="dropdown-item text-dark" asp-action="PorContrato" asp-route-id="@item.ContratoId"><i class="bi bi-credit-card-fill"> </i>Ver Pagos</a>
+                            <a class="dropdown-item text-dark" asp-controller="Contrato" asp-action="Details" asp-route-id="@item.ContratoId"><i class="bi bi-file-earmark-text-fill"> </i>Ver Detalles </a>
+                        </div>
+                    </div>
                 </td>
+                }
                 <td>
                     <a asp-action="Edit" title="Editar" asp-route-id="@item.Id"><i class="bi bi-pencil-fill"></i></a> |
                     <a asp-action="Details" title="Detalles" asp-route-id="@item.Id"><i class="bi bi-file-earmark-text-fill text-info"></i></a>

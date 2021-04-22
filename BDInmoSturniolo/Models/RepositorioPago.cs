@@ -92,7 +92,7 @@ namespace BDInmoSturniolo.Models
                 string sql = $"SELECT p.{nameof(Pago.Id)}, {nameof(Pago.Fecha)}, " +
                     $"{nameof(Pago.Importe)}, {nameof(Pago.ContratoId)}, " +
                     $"{nameof(Pago.Contrato.Inquilino.Apellido)}, {nameof(Pago.Contrato.Inquilino.Nombre)}, " +
-                    $"{nameof(Pago.Contrato.Inmueble.Direccion)} " +
+                    $"{nameof(Pago.Contrato.Inmueble.Direccion)}, {nameof(Pago.Contrato.FechaInicio)} " +
                     $"FROM Pagos p " +
                     $"INNER JOIN Contratos c ON p.ContratoId = c.Id " +
                     $"INNER JOIN Inquilinos inq ON c.InquilinoId = inq.Id " +
@@ -122,7 +122,8 @@ namespace BDInmoSturniolo.Models
                                 Inmueble = new Inmueble
                                 {
                                     Direccion = reader.GetString(6)
-                                }
+                                },
+                                FechaInicio = reader.GetDateTime(7)
                             }
                         };
                     }
